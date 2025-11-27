@@ -145,6 +145,22 @@ header img, .header img, nav img, .navbar img {
         min-width: 28px !important;
         max-width: 80px !important;
     }
+
+    /* Forçar espaço extra para o header fixo no mobile e empurrar a hero para baixo */
+    header#header {
+        height: 72px !important;
+        min-height: 72px !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+    header#header nav {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+    /* Garante que a hero fique abaixo do header */
+    body.ocean-gradient #service-hero {
+        padding-top: calc(72px + 16px) !important; /* 16px de folga */
+    }
 }
 
 @media (max-width: 480px) {
