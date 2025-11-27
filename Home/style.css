@@ -161,18 +161,7 @@ header img, .header img, nav img, .navbar img {
         max-width: 60px !important;
     }
 }
-/* Esconder o polvo (ilustração) no mobile para evitar corte pelo header */
-@media (max-width: 768px) {
-    .hero-illustration,
-    .hero-illustration > .absolute,
-    .hero-illustration img.tentacle {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        height: 0 !important;
-        width: 0 !important;
-    }
-}
+/* Ilustração do polvo: visível por padrão (removida regra de ocultação no mobile) */
 /* style.css */
 
 /* Oculta a barra de rolagem para um visual mais limpo */
