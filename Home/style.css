@@ -1,5 +1,5 @@
 /* Responsividade específica para o card do gráfico */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     .glass-effect {
         width: 100vw !important;
         max-width: 100vw !important;
@@ -64,13 +64,6 @@
         padding-bottom: 40px !important;
         height: auto !important;
         margin-top: 0 !important;
-    }
-
-    /* Esconde o polvo (kraken) no mobile */
-    #service-hero .tentacle,
-    #service-hero img[alt*="Kraken"],
-    #service-hero img[src*="kraken"] {
-        display: none !important;
     }
 
     /* HERO: garantir espaçamento do cabeçalho e altura suficiente para o polvo */
@@ -166,6 +159,18 @@ header img, .header img, nav img, .navbar img {
         height: 28px !important;
         min-width: 20px !important;
         max-width: 60px !important;
+    }
+}
+/* Esconder o polvo (ilustração) no mobile para evitar corte pelo header */
+@media (max-width: 768px) {
+    .hero-illustration,
+    .hero-illustration > .absolute,
+    .hero-illustration img.tentacle {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
     }
 }
 /* style.css */
