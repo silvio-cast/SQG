@@ -33,6 +33,16 @@
         white-space: normal !important;
         word-break: break-word !important;
     }
+
+    /* HERO: primeira div maior e espaçamento do cabeçalho */
+    #service-hero {
+        min-height: 90vh !important;
+        padding-top: 110px !important;
+    }
+    #service-hero > .container {
+        min-height: 60vh !important;
+        padding-top: 24px !important;
+    }
 }
 /* Responsividade geral */
 html, body {
