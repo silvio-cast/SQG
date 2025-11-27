@@ -104,13 +104,14 @@ img, svg, canvas {
 }
 
 /* Logo do header */
+/* Logo do header */
 header img, .header img, nav img, .navbar img {
-    height: 48px;
-    width: auto;
-    min-width: 40px;
-    min-height: 40px;
-    max-width: 120px;
-    display: inline-block;
+    height: 48px !important; /* Aumentado para desktop e forçado */
+    width: auto !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    max-width: 120px !important;
+    display: inline-block !important;
 }
 
 @media (max-width: 1024px) {
@@ -118,6 +119,29 @@ header img, .header img, nav img, .navbar img {
     .text-4xl { font-size: 2rem !important; }
     .text-2xl { font-size: 1.3rem !important; }
     .p-8 { padding: 2rem !important; }
+}
+
+/* Ajuste do botão 'Para Empresas' no header (desktop): tamanho conforme texto */
+@media (min-width: 768px) {
+    header a[href="paraempresas.html"], header a[href="/paraempresas.html"] {
+        display: inline-block !important;
+        width: auto !important;
+        min-width: 0 !important;
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        white-space: nowrap !important;
+    }
+}
+
+/* Espaçamento entre logo e navegação no desktop */
+@media (min-width: 1024px) {
+    header nav .logo-container {
+        margin-right: 36px !important; /* ajuste conforme desejar */
+        display: flex !important;
+        align-items: center !important;
+    }
 }
 
 @media (max-width: 768px) {
@@ -177,6 +201,14 @@ header img, .header img, nav img, .navbar img {
         max-width: 60px !important;
     }
 }
+/* Logo menor no mobile: metade da altura do desktop (desktop = 64px) */
+@media (max-width: 480px) {
+    header img, .header img, nav img, .navbar img {
+        height: 40px !important;
+        min-width: 30px !important;
+        max-width: 90px !important;
+    }
+}
 /* Ilustração do polvo: visível por padrão (removida regra de ocultação no mobile) */
 /* style.css */
 
@@ -206,4 +238,44 @@ header img, .header img, nav img, .navbar img {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+}
+/* Forçar fundo azul escuro no menu hamburger (mobile) e remover efeito glass para maior legibilidade */
+@media (max-width: 768px) {
+    #mobile-menu {
+        background: linear-gradient(180deg, #016fff 0%, #09213f 100%) !important; /* azul escuro */
+        color: #ffffff !important;
+        border: none !important;
+        box-shadow: 0 6px 18px rgba(10, 36, 150, 0.45) !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+    }
+    #mobile-menu a {
+        color: #ffffff !important;
+    }
+    #mobile-menu a:hover {
+        color: #cfe9ff !important;
+    }
+}
+
+/* Tornar o painel do menu hamburger menor (largura e altura) sem alterar o botão */
+@media (max-width: 768px) {
+    #mobile-menu {
+        width: calc(100% - 40px) !important; /* deixa espaço lateral */
+        max-width: 420px !important;
+        margin: 8px auto 0 auto !important; /* centralizado abaixo do header */
+        border-radius: 12px !important;
+        padding: 8px 12px !important;
+        max-height: 60vh !important; /* limita altura */
+        overflow-y: auto !important; /* scrollbar interno se necessário */
+        position: absolute !important;
+        right: 20px !important;
+        top: 64px !important; /* alinhado abaixo do header */
+        z-index: 60 !important;
+    }
+    #mobile-menu a {
+        display: block !important;
+        padding: 10px 12px !important; /* menos padding para ficar mais compacto */
+        border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+    }
+    #mobile-menu a:last-child { border-bottom: none !important; }
 }
