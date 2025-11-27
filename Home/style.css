@@ -34,6 +34,19 @@
         word-break: break-word !important;
     }
 
+    /* HERO: garantir espaçamento do cabeçalho e altura suficiente para o polvo, com seletor mais específico */
+    body .ocean-gradient #service-hero {
+        padding-top: 110px !important;
+        min-height: 850px !important;
+        height: auto !important;
+    }
+    body .ocean-gradient #service-hero > .container {
+        min-height: 700px !important;
+        padding-top: 0 !important;
+        padding-bottom: 40px !important;
+        height: auto !important;
+    }
+
     /* HERO: garantir espaçamento do cabeçalho e altura suficiente para o polvo */
     #service-hero {
         padding-top: 90px !important; /* Espaço para o header fixo */
