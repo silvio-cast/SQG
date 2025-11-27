@@ -49,12 +49,21 @@
 
     /* Remove altura fixa do Tailwind no mobile e força padding-top para header */
     #service-hero {
+        display: block !important;
         height: auto !important;
-        min-height: 850px !important;
-        padding-top: 110px !important;
+        min-height: 900px !important;
+        padding-top: 120px !important;
+        margin-top: 0 !important;
     }
     #service-hero.h-\[700px\] {
         height: auto !important;
+    }
+    #service-hero > .container {
+        min-height: 750px !important;
+        padding-top: 0 !important;
+        padding-bottom: 40px !important;
+        height: auto !important;
+        margin-top: 0 !important;
     }
 
     /* HERO: garantir espaçamento do cabeçalho e altura suficiente para o polvo */
