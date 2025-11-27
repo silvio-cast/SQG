@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQG | Comunidade de Alertas</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // Importa documentId para referência em comentários
+        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp, orderBy, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js"; 
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 📢 CONFIGURAÇÕES REAIS DO FIREBASE AQUI
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqwFFCcEjsl25VjJRndKaKKiOeRQXXmUo",
+            authDomain: "seraqueegolpe-870c0.firebaseapp.com",
+            projectId: "seraqueegolpe-870c0",
+            storageBucket: "seraqueegolpe-870c0.firebasestorage.app",
+            messagingSenderId: "668088842346",
+            appId: "1:668088842346:web:b5a3e958fc82831661f213",
+            measurementId: "G-6F4KWG739C"
+        };
+        
+        const appId = firebaseConfig.appId;
+        const initialAuthToken = null; 
+        
+        let db, auth, storage;
+        let currentUserId = null;
+        let authListenerInitialized = false; 
+        
+        setLogLevel('debug');
+
+        // Inicialização do Firebase e Autenticação
+        const initFirebase = async () => {
+            try {
+                if (!firebaseConfig.apiKey) {
+                    document.getElementById('posts-list').innerHTML = '<p class="text-red-400 text-center mt-8"><i class="fas fa-times-circle mr-2"></i> Erro: Configuração do Firebase ausente.</p>';
+                    throw new Error("Configuração do Firebase ausente.");
+                }
+
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                storage = getStorage(app); 
+                
+                const postsList = document.getElementById('posts-list');
+                postsList.innerHTML = '<p class="text-cyan-400 text-center mt-8"><i class="fas fa-spinner fa-spin mr-2"></i> 1. Autenticando usuário...</p>';
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        currentUserId = user.uid;
+                        document.getElementById('user-id-text').textContent = `ID: ${currentUserId.substring(0, 8)}...`;
+                        console.log("Usuário autenticado:", currentUserId);
+                        
+                        if (!authListenerInitialized) {
+                            setupPostListener();
+                            document.getElementById('post-form-container').classList.remove('hidden');
+                            authListenerInitialized = true;
+                        }
+                    } else {
+                         if (!authListenerInitialized) {
+                            signInAnonymously(auth).catch((error) => {
+                                console.error("Erro durante o Sign-in:", error);
+                                postsList.innerHTML = '<p class="text-red-400 text-center mt-8">Erro de Autenticação. Por favor, recarregue a página.</p>';
+                                authListenerInitialized = true;
+                            });
+                         }
+                    }
+                });
+                
+            } catch (error) {
+                console.error("Erro na inicialização do Firebase:", error);
+                document.getElementById('message-box').classList.remove('hidden');
+                document.getElementById('message-box').classList.add('bg-red-500/80');
+                document.getElementById('message-box').textContent = "Erro grave ao conectar o Firebase. Tente recarregar.";
+            }
+        };
+
+        const getPublicCollectionPath = () => {
+            return `artifacts/${appId}/public/data/comunidade_posts`;
+        };
+        
+        const tagMap = {
+            'golpe': { text: 'Golpe Confirmado', color: 'bg-red-600' },
+            'tentativa': { text: 'Tentativa de Golpe', color: 'bg-orange-400' },
+            'alerta': { text: 'Alerta Geral', color: 'bg-cyan-600' },
+            'duvida': { text: 'Dúvida/Suspeita', color: 'bg-yellow-600' }
+        };
+
+        // =================================================================
+        // NOVO: Funções de Controle de Voto
+        // =================================================================
+        const getVotes = (postId) => {
+            const votes = localStorage.getItem('postVotes');
+            return votes ? JSON.parse(votes) : {};
+        };
+
+        const saveVote = (postId, type) => {
+            const votes = getVotes();
+            votes[postId] = type; // Salva o tipo de voto ('golpe' ou 'nao-golpe')
+            localStorage.setItem('postVotes', JSON.stringify(votes));
+        };
+        
+        const hasVoted = (postId) => {
+            const votes = getVotes();
+            return votes.hasOwnProperty(postId);
+        };
+        
+        const getVoteType = (postId) => {
+             const votes = getVotes();
+             return votes[postId] || null;
+        };
+
+        window.votePost = async (postId, type) => {
+            if (!currentUserId) {
+                alert("Autenticação em andamento. Por favor, aguarde.");
+                return;
+            }
+            
+            if (hasVoted(postId)) {
+                alert("Você já votou nesta postagem!");
+                return;
+            }
+            
+            const postRef = doc(db, getPublicCollectionPath(), postId);
+            
+            let fieldToUpdate = '';
+            if (type === 'golpe') {
+                fieldToUpdate = 'golpe_votes'; 
+            } else if (type === 'nao-golpe') {
+                fieldToUpdate = 'nao_golpe_votes'; 
+            } else {
+                return;
+            }
+
+            try {
+                // Tenta atualizar o Firestore
+                await updateDoc(postRef, {
+                    [fieldToUpdate]: increment(1)
+                });
+                
+                // Se o Firestore aceitou, salva o voto localmente
+                saveVote(postId, type); 
+                
+            } catch (e) {
+                console.error(`Erro ao votar (${type}):`, e);
+                alert("Erro ao registrar voto. Tente novamente.");
+            }
+        };
+
+        // ... (Função submitComment é mantida)
+
+        window.submitComment = async (postId) => {
+            const commentInput = document.getElementById(`comment-input-${postId}`);
+            const content = commentInput.value.trim();
+
+            if (!content || !currentUserId) return;
+
+            try {
+                const commentsColRef = collection(db, `${getPublicCollectionPath()}/${postId}/comentarios`);
+                
+                await addDoc(commentsColRef, {
+                    content: content,
+                    userId: currentUserId,
+                    timestamp: serverTimestamp()
+                });
+                
+                commentInput.value = '';
+            } catch (e) {
+                console.error("Erro ao adicionar comentário:", e);
+                alert("Erro ao enviar comentário. Tente novamente.");
+            }
+        };
+        
+        // ... (Função submitPost é mantida)
+        
+        window.submitPost = async () => {
+            const titleInput = document.getElementById('post-title');
+            const contentInput = document.getElementById('post-content');
+            const tagInput = document.getElementById('post-tag');
+            const imageInput = document.getElementById('post-image');
+            
+            const title = titleInput.value.trim();
+            const content = contentInput.value.trim();
+            const tag = tagInput.value;
+            const imageFile = imageInput.files[0];
+
+            if (!title || !content || !tag) { 
+                document.getElementById('message-box').classList.remove('hidden', 'bg-green-500/80');
+                document.getElementById('message-box').classList.add('bg-red-500/80');
+                document.getElementById('message-box').textContent = "Por favor, preencha Título, Conteúdo e selecione a Categoria.";
+                setTimeout(() => document.getElementById('message-box').classList.add('hidden'), 3000);
+                return;
+            }
+
+            if (!currentUserId) {
+                document.getElementById('message-box').classList.remove('hidden', 'bg-green-500/80');
+                document.getElementById('message-box').classList.add('bg-red-500/80');
+                document.getElementById('message-box').textContent = "Autenticação em andamento. Por favor, tente novamente em instantes.";
+                setTimeout(() => document.getElementById('message-box').classList.add('hidden'), 3000);
+                return;
+            }
+            
+            let imageUrl = null;
+            
+            if (imageFile) {
+                const storageRef = ref(storage, `comunidade_posts/${currentUserId}/${Date.now()}_${imageFile.name}`);
+                try {
+                    document.getElementById('message-box').classList.remove('hidden', 'bg-red-500/80', 'bg-green-500/80');
+                    document.getElementById('message-box').classList.add('bg-cyan-600/80');
+                    document.getElementById('message-box').textContent = "Enviando imagem...";
+                    
+                    const snapshot = await uploadBytes(storageRef, imageFile);
+                    imageUrl = await getDownloadURL(snapshot.ref);
+                    
+                } catch (e) {
+                    console.error("Erro ao fazer upload da imagem:", e);
+                    document.getElementById('message-box').classList.remove('hidden', 'bg-green-500/80');
+                    document.getElementById('message-box').classList.add('bg-red-500/80');
+                    document.getElementById('message-box').textContent = "Erro ao enviar imagem. Tente sem a imagem.";
+                    return;
+                }
+            }
+
+            try {
+                const postsColRef = collection(db, getPublicCollectionPath());
+                
+                await addDoc(postsColRef, {
+                    title: title,
+                    content: content,
+                    tag: tag,
+                    userId: currentUserId,
+                    imageUrl: imageUrl,
+                    timestamp: serverTimestamp() 
+                });
+
+                titleInput.value = '';
+                contentInput.value = '';
+                tagInput.value = '';
+                imageInput.value = '';
+                document.getElementById('message-box').classList.remove('hidden', 'bg-red-500/80', 'bg-cyan-600/80');
+                document.getElementById('message-box').classList.add('bg-green-500/80');
+                document.getElementById('message-box').textContent = "Postagem enviada com sucesso!";
+                setTimeout(() => document.getElementById('message-box').classList.add('hidden'), 3000);
+
+            } catch (e) {
+                console.error("Erro ao adicionar documento:", e);
+                document.getElementById('message-box').classList.remove('hidden', 'bg-green-500/80', 'bg-cyan-600/80');
+                document.getElementById('message-box').classList.add('bg-red-500/80');
+                document.getElementById('message-box').textContent = "Erro ao enviar postagem: " + e.message;
+            }
+        };
+
+
+        // =================================================================
+        // NOVO: Função para abrir e fechar o modal
+        // =================================================================
+        window.openModal = (imageUrl) => {
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            modalImage.src = imageUrl;
+            modal.classList.remove('hidden');
+        };
+
+        window.closeModal = () => {
+            document.getElementById('image-modal').classList.add('hidden');
+        };
+
+        // Função para configurar o listener em tempo real para as postagens
+        const setupPostListener = () => {
+            const postsList = document.getElementById('posts-list');
+            postsList.innerHTML = '<p class="text-cyan-400 text-center mt-8"><i class="fas fa-spinner fa-spin mr-2"></i> 2. Conectando ao Banco de Dados (Firestore)...</p>';
+
+            const postsColRef = collection(db, getPublicCollectionPath());
+            
+            const q = query(postsColRef, orderBy('timestamp', 'desc'));
+
+            onSnapshot(q, (snapshot) => {
+                const postsList = document.getElementById('posts-list');
+                postsList.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    postsList.innerHTML = '<p class="text-blue-300 text-center mt-8">Nenhuma postagem ainda. Seja o primeiro a alertar a comunidade!</p>';
+                    return;
+                }
+                
+                snapshot.docs.forEach((docSnap) => {
+                    const post = docSnap.data();
+                    const postId = docSnap.id;
+                    
+                    const date = post.timestamp ? 
+                        new Date(post.timestamp.seconds * 1000).toLocaleString('pt-BR') : 
+                        'Data Desconhecida';
+                        
+                    const postTag = tagMap[post.tag] || tagMap['alerta'];
+                    const tagText = postTag.text;
+                    const tagColor = postTag.color;
+                    
+                    // Verifica se o usuário já votou neste post para desabilitar/mudar a cor do botão
+                    const userVotedType = getVoteType(postId);
+                    const votedGolpeClass = userVotedType === 'golpe' ? 'opacity-100 ring-2 ring-red-300' : 'opacity-80';
+                    const votedNaoGolpeClass = userVotedType === 'nao-golpe' ? 'opacity-100 ring-2 ring-green-300' : 'opacity-80';
+                    const disabledAttr = userVotedType ? 'disabled' : ''; // Desabilita se já votou
+                    
+                    const imageHtml = post.imageUrl 
+                        ? `<img onclick="openModal('${post.imageUrl}')" src="${post.imageUrl}" alt="Evidência do Alerta" class="mt-4 max-h-64 w-full object-contain cursor-pointer rounded-lg border border-white/20 transition-transform hover:scale-[1.01]">`
+                        : '';
+                        
+                    // Contadores de votos
+                    const golpeVotes = post.golpe_votes || 0;
+                    const naoGolpeVotes = post.nao_golpe_votes || 0;
+                    const totalVotes = golpeVotes + naoGolpeVotes;
+                    const golpePercent = totalVotes > 0 ? ((golpeVotes / totalVotes) * 100).toFixed(0) : 50;
+
+
+                    // Criação do Card de Postagem
+                    const postElement = `
+                        <div class="glass-effect p-6 rounded-xl mb-8 shadow-2xl hover:bg-white/20 transition-all">
+                            <div class="flex items-center justify-between mb-3 border-b border-white/20 pb-2">
+                                <h3 class="text-2xl font-bold text-white">${post.title}</h3>
+                                <div class="text-sm text-blue-300 flex items-center space-x-3">
+                                    <span class="px-3 py-1 ${tagColor} rounded-full text-white text-xs font-semibold">${tagText}</span>
+                                </div>
+                            </div>
+                            <p class="text-blue-200 mb-4 whitespace-pre-wrap">${post.content}</p>
+                            ${imageHtml}
+                            
+                            <div class="mt-4 pt-4 border-t border-white/20 flex justify-between items-center">
+                                <div class="flex space-x-2">
+                                    <button ${disabledAttr} onclick="votePost('${postId}', 'golpe')" class="px-3 py-1 bg-red-600 hover:bg-red-700 transition-colors rounded-full text-white font-semibold text-sm flex items-center ${votedGolpeClass}">
+                                        <i class="fas fa-hand-point-up mr-2"></i> É Golpe (${golpeVotes})
+                                    </button>
+                                    <button ${disabledAttr} onclick="votePost('${postId}', 'nao-golpe')" class="px-3 py-1 bg-green-600 hover:bg-green-700 transition-colors rounded-full text-white font-semibold text-sm flex items-center ${votedNaoGolpeClass}">
+                                        <i class="fas fa-hand-point-down mr-2"></i> Não é Golpe (${naoGolpeVotes})
+                                    </button>
+                                </div>
+                                <div class="text-sm text-blue-300 font-semibold">
+                                    ${golpePercent}% Votaram que é Golpe
+                                </div>
+                            </div>
+                            
+                            <button onclick="toggleComments('${postId}')" class="mt-4 text-cyan-400 hover:text-cyan-300 font-semibold text-sm">
+                                <i class="fas fa-comment-dots mr-2"></i> Comentários (<span id="comment-count-${postId}">0</span>)
+                            </button>
+                            
+                            <div id="comments-area-${postId}" class="mt-4 hidden p-4 bg-white/5 rounded-lg">
+                                <div id="comments-list-${postId}" class="space-y-3 mb-4">
+                                    <p class="text-blue-300 text-sm">Carregando comentários...</p>
+                                </div>
+                                
+                                <div class="flex space-x-2">
+                                    <input type="text" id="comment-input-${postId}" placeholder="Adicione um comentário..." class="flex-grow px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300 focus:outline-none focus:border-cyan-400">
+                                    <button onclick="submitComment('${postId}')" class="bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-600 transition-colors font-semibold">
+                                        Comentar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="text-xs text-blue-400 font-mono break-all mt-3 pt-2 border-t border-white/10">
+                                Postado em: ${date} por Usuário ID: ${post.userId.substring(0, 10)}...
+                            </div>
+                        </div>
+                    `;
+                    postsList.innerHTML += postElement;
+                    
+                    setupCommentListener(postId);
+                });
+            }, (error) => {
+                console.error("Erro ao ouvir postagens:", error);
+                postsList.innerHTML = '<p class="text-red-400 text-center mt-8"><i class="fas fa-exclamation-triangle mr-2"></i> Erro ao carregar posts. Isso pode ser um problema de Regras de Segurança do banco de dados.</p>';
+            });
+        };
+        
+        // ... (setupCommentListener e toggleComments são mantidos)
+        
+        // Listener de Comentários em Tempo Real
+        const setupCommentListener = (postId) => {
+             const commentsColRef = collection(db, `${getPublicCollectionPath()}/${postId}/comentarios`);
+             const qComments = query(commentsColRef, orderBy('timestamp', 'asc'));
+
+             onSnapshot(qComments, (snapshot) => {
+                 const commentsList = document.getElementById(`comments-list-${postId}`);
+                 const commentCountElement = document.getElementById(`comment-count-${postId}`);
+                 
+                 if (!commentsList) return;
+
+                 commentsList.innerHTML = '';
+                 commentCountElement.textContent = snapshot.size;
+
+                 if (snapshot.empty) {
+                     commentsList.innerHTML = '<p class="text-blue-300 text-sm italic">Seja o primeiro a comentar.</p>';
+                     return;
+                 }
+
+                 snapshot.docs.forEach((commentDoc) => {
+                     const comment = commentDoc.data();
+                     const commentDate = comment.timestamp ? 
+                        new Date(comment.timestamp.seconds * 1000).toLocaleString('pt-BR') : 
+                        'Data Desconhecida';
+                        
+                     const commentElement = `
+                        <div class="border-b border-white/10 pb-2">
+                            <p class="text-white text-sm whitespace-pre-wrap">${comment.content}</p>
+                            <span class="text-xs text-blue-400 italic">Por ID: ${comment.userId.substring(0, 8)}... - ${commentDate}</span>
+                        </div>
+                     `;
+                     commentsList.innerHTML += commentElement;
+                 });
+             });
+        };
+
+        // Função para expandir/recolher área de comentários
+        window.toggleComments = (postId) => {
+             const commentsArea = document.getElementById(`comments-area-${postId}`);
+             if (commentsArea) {
+                 commentsArea.classList.toggle('hidden');
+             }
+        };
+
+
+        // Iniciar tudo ao carregar o DOM
+        document.addEventListener('DOMContentLoaded', initFirebase);
+    </script>
+    
+    <style>
+        /* Estilos e animações (Mantidos) */
+        ::-webkit-scrollbar { display: none; }
+        * { font-family: 'Poppins', sans-serif; }
+
+        .ocean-gradient {
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 25%, #0369a1 50%, #0284c7 75%, #0ea5e9 100%);
+            background-attachment: fixed;
+        }
+
+        .deep-ocean {
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 25%, #2563eb 50%, #3b82f6 75%, #60a5fa 100%);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Animação de Algas/Fundo */
+        @keyframes sway {
+            0% { transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(5px) rotate(1deg); }
+            100% { transform: translateX(0) rotate(0deg); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+            50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+        }
+
+        .seaweed {
+            position: fixed;
+            bottom: 0;
+            opacity: 0.5;
+            animation: sway 10s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+        
+        .animate-bounce-custom {
+            animation: bounce 1s infinite;
+        }
+    </style>
+</head>
+<body class="ocean-gradient min-h-screen pt-24">
+
+<div class="seaweed left-0 h-40 w-12 bg-green-500/30 rounded-t-full" style="height: 200px; width: 30px; left: 5%; animation-duration: 8s; animation-delay: -2s;"></div>
+<div class="seaweed right-0 h-40 w-12 bg-cyan-500/30 rounded-t-full" style="height: 150px; width: 25px; right: 10%; animation-duration: 6s; animation-delay: -1s;"></div>
+<div class="seaweed left-1/4 h-40 w-12 bg-blue-500/30 rounded-t-full" style="height: 250px; width: 40px; left: 25%; animation-duration: 12s; animation-delay: -4s;"></div>
+
+<header id="header" class="fixed top-0 w-full z-50 glass-effect">
+    <nav class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            
+            <div class="flex items-center space-x-3">
+                <img src="img/logo.png" 
+                    alt="SQG Logo" 
+                    class="h-10 w-10 object-contain rounded-full" 
+                    onerror="this.onerror=null; this.src='https://placehold.co/40x40/0ea5e9/ffffff?text=SQG';" />
+                <span class="text-white font-bold text-2xl leading-none">SQG | Comunidade</span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="text-white hover:text-cyan-300 transition-colors">Home</a>
+                <a href="#" class="text-cyan-300 font-semibold transition-colors">Comunidade</a>
+                <a href="paraempresas.html" class="text-white hover:text-cyan-300 transition-colors">Para Empresas</a>
+            </div>
+            
+            <div id="user-info-container" class="flex items-center space-x-4">
+                
+                <div class="flex flex-col items-end">
+                    <p id="user-id-text" class="text-blue-300 text-xs hidden sm:block mb-1">ID: Autenticando...</p>
+                    <a href="index.html" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-4 py-2 rounded-full hover:from-cyan-600 hover:to-blue-700 transition-all font-semibold shadow-lg text-sm">
+                        Voltar para Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="container mx-auto px-6 py-12 relative z-10">
+    <div class="max-w-4xl mx-auto">
+        
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-white mb-4">
+                Alertas da <span class="text-cyan-400">Comunidade</span>
+            </h1>
+            <p class="text-xl text-blue-200 max-w-3xl mx-auto">
+                Compartilhe e veja alertas de golpes e ameaças reportados por outros usuários em tempo real.
+            </p>
+        </div>
+        
+        <div id="message-box" class="hidden text-white p-4 rounded-lg mb-6 text-center shadow-lg font-semibold">
+            Postagem enviada com sucesso!
+        </div>
+
+        <div id="post-form-container" class="glass-effect p-8 rounded-2xl mb-12 shadow-2xl border-2 border-cyan-400 hidden">
+            <h2 class="text-3xl font-bold text-white mb-6">Criar Novo Alerta</h2>
+            <form onsubmit="event.preventDefault(); submitPost();">
+                <div class="mb-4">
+                    <label for="post-title" class="block text-white font-semibold mb-2">Título do Alerta (Máx. 100 caracteres)</label>
+                    <input type="text" id="post-title" maxlength="100" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300 focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all" placeholder="Ex: Novo golpe de PIX por engano">
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="post-tag" class="block text-white font-semibold mb-2">Classifique o Alerta (Impacto)</label>
+                        <select id="post-tag" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all">
+                            <option value="" disabled selected class="text-gray-400">Selecione uma categoria de alerta</option>
+                            <option value="golpe" class="bg-red-600 text-white font-semibold">Cai em um Golpe! (Risco Alto)</option>
+                            <option value="tentativa" class="bg-orange-400 text-white font-semibold">Tentaram me dar um Golpe (Risco Médio)</option>
+                            <option value="duvida" class="bg-yellow-600 text-white font-semibold">Dúvida/Suspeita (Risco Baixo)</option>
+                            <option value="alerta" class="bg-cyan-600 text-white font-semibold">Alerta Geral (Notificação)</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="post-image" class="block text-white font-semibold mb-2">Anexar Evidência (Opcional)</label>
+                        <input type="file" id="post-image" accept="image/*" class="w-full text-white text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-500 file:text-white hover:file:bg-cyan-600 transition-all cursor-pointer">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="post-content" class="block text-white font-semibold mb-2">Detalhes e Dicas de Prevenção</label>
+                    <textarea id="post-content" rows="4" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300 focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all resize-none" placeholder="Descreva o golpe e diga como se proteger."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
+                    <i class="fas fa-bullhorn mr-3"></i> Postar Alerta
+                </button>
+            </form>
+        </div>
+
+        <div id="posts-list">
+            <p class="text-blue-300 text-center mt-8">Aguardando autenticação para carregar...</p>
+        </div>
+    </div>
+</main>
+
+<div id="image-modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/90 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 cursor-pointer">
+    <div class="relative max-w-4xl max-h-full mx-auto" onclick="event.stopPropagation()">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white text-3xl hover:text-red-400 transition-colors z-10 p-2">
+            <i class="fas fa-times-circle"></i>
+        </button>
+        <img id="modal-image" src="" alt="Imagem Ampliada" class="max-h-[90vh] w-auto rounded-lg shadow-2xl">
+    </div>
+</div>
+
+<a href="orientacoes.html" class="fixed bottom-8 right-8 bg-red-700 text-white px-6 py-3 rounded-full hover:bg-red-800 transition-all font-bold shadow-2xl text-md flex items-center z-50 animate-bounce-custom">
+    <i class="fas fa-hand-holding-usd fa-rotate-270 mr-2"></i> CAI EM UM GOLPE!
+</a>
+
+<footer id="footer" class="py-6 bg-blue-950 text-blue-200 mt-12 relative z-10">
+    <div class="container mx-auto px-6 text-center text-sm">
+        <p>
+            © 2025 SQG. Comunidade de Alertas. Seu ID de Sessão é essencial para a postagem.
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>

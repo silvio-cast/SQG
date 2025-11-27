@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQG | Ação Imediata Contra Golpes</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Estilos e animações da Home e Comunidade */
+        ::-webkit-scrollbar { display: none; }
+        * { font-family: 'Poppins', sans-serif; }
+
+        .ocean-gradient {
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 25%, #0369a1 50%, #0284c7 75%, #0ea5e9 100%);
+            background-attachment: fixed;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Animação de Algas/Fundo (Mantida para consistência visual) */
+        @keyframes sway {
+            0% { transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(5px) rotate(1deg); }
+            100% { transform: translateX(0) rotate(0deg); }
+        }
+        
+        .seaweed {
+            position: fixed;
+            bottom: 0;
+            opacity: 0.5;
+            animation: sway 10s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="ocean-gradient min-h-screen pt-24">
+
+<div class="seaweed left-0 h-40 w-12 bg-green-500/30 rounded-t-full" style="height: 200px; width: 30px; left: 5%; animation-duration: 8s; animation-delay: -2s;"></div>
+<div class="seaweed right-0 h-40 w-12 bg-cyan-500/30 rounded-t-full" style="height: 150px; width: 25px; right: 10%; animation-duration: 6s; animation-delay: -1s;"></div>
+
+<header id="header" class="fixed top-0 w-full z-50 glass-effect">
+    <nav class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            
+            <div class="flex items-center space-x-3">
+                <img src="img/logo.png" 
+                    alt="SQG Logo" 
+                    class="h-10 w-10 object-contain rounded-full" 
+                    onerror="this.onerror=null; this.src='https://placehold.co/40x40/0ea5e9/ffffff?text=SQG';" />
+                <span class="text-white font-bold text-2xl leading-none">SQG | Orientação de Emergência</span>
+            </div>
+            
+            <a href="comunidade.html" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-4 py-2 rounded-full hover:from-cyan-600 hover:to-blue-700 transition-all font-semibold shadow-lg text-sm">
+                <i class="fas fa-arrow-left mr-2"></i> Voltar para a Comunidade
+            </a>
+        </div>
+    </nav>
+</header>
+
+<main class="container mx-auto px-6 py-12 relative z-10">
+    <div class="max-w-4xl mx-auto">
+        
+        <div class="text-center mb-12">
+            <h1 class="text-6xl font-extrabold text-red-400 mb-4">
+                <i class="fas fa-exclamation-triangle mr-3"></i> FUI VÍTIMA DE UM GOLPE. E AGORA?
+            </h1>
+            <p class="text-xl text-blue-200 max-w-3xl mx-auto">
+                Mantenha a calma. As próximas horas são cruciais. Siga este guia de **ação imediata** para mitigar os danos.
+            </p>
+        </div>
+        
+        <div class="glass-effect p-8 rounded-2xl mb-12 shadow-2xl border-2 border-red-500/50">
+            <h2 class="text-4xl font-bold text-white mb-6 border-b border-red-400/50 pb-3">1. Ação Imediata (Minutos)</h2>
+            <ul class="space-y-6 text-xl text-blue-100">
+                
+                <li class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-lg">
+                        <span class="font-bold text-white">1</span>
+                    </div>
+                    <div>
+                        <strong class="text-red-300">Contate Seu Banco/Instituição:</strong> Ligue imediatamente para o 0800 do seu banco. Se a transferência foi via PIX, acione o **Mecanismo Especial de Devolução (MED)** o mais rápido possível.
+                    </div>
+                </li>
+                
+                <li class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-lg">
+                        <span class="font-bold text-white">2</span>
+                    </div>
+                    <div>
+                        <strong class="text-red-300">Mude Todas as Senhas Críticas:</strong> Comece por e-mail principal, contas bancárias e aplicativos de mensagens (WhatsApp). Use um dispositivo limpo (que não foi comprometido).
+                    </div>
+                </li>
+                
+                <li class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-lg">
+                        <span class="font-bold text-white">3</span>
+                    </div>
+                    <div>
+                        <strong class="text-red-300">Desative Linhas/Bloqueie Cartões:</strong> Se a fraude envolveu roubo do celular ou clonagem de chip (SIM Swap), contate a operadora e peça o bloqueio imediato da linha.
+                    </div>
+                </li>
+                
+            </ul>
+        </div>
+        
+        <div class="glass-effect p-8 rounded-2xl mb-12 shadow-2xl border-2 border-cyan-400/50">
+            <h2 class="text-4xl font-bold text-white mb-6 border-b border-cyan-400/50 pb-3">2. Documentação e Polícia (Horas)</h2>
+            <ul class="space-y-6 text-xl text-blue-100">
+                
+                <li class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-cyan-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-lg">
+                        <i class="fas fa-camera text-white"></i>
+                    </div>
+                    <div>
+                        <strong class="text-cyan-300">Reúna Provas:</strong> Tire prints de todas as conversas, comprovantes de transferência, links maliciosos e qualquer detalhe do contato. **Não apague nada.**
+                    </div>
+                </li>
+                
+                <li class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-cyan-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-lg">
+                        <i class="fas fa-file-alt text-white"></i>
+                    </div>
+                    <div>
+                        <strong class="text-cyan-300">Registre um Boletim de Ocorrência (B.O.):</strong> Faça o registro imediatamente na delegacia online da sua Polícia Civil ou presencialmente. Use o máximo de detalhes possível, incluindo os prints e comprovantes.
+                    </div>
+                </li>
+                
+                <li class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-cyan-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-lg">
+                        <i class="fas fa-share-alt text-white"></i>
+                    </div>
+                    <div>
+                        <strong class="text-cyan-300">Notifique a Comunidade SQG:</strong> Use a página da **Comunidade** para postar um alerta (agora que você já tomou as medidas de segurança), ajudando a proteger outros usuários.
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="text-center mt-16">
+            <h3 class="text-3xl font-bold text-white mb-4">Links e Telefones Úteis</h3>
+            <p class="text-blue-200 mb-6">Encontre o portal da Delegacia Virtual do seu estado ou o contato principal da sua instituição.</p>
+            
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="https://delegaciavirtual.sinesp.gov.br/portal/" target="_blank" class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-colors font-semibold shadow-lg">
+                    <i class="fas fa-user-shield mr-2"></i> Delegacia Virtual Nacional
+                </a>
+                <a href="https://www.bcb.gov.br/estabilidadefinanceira/med" target="_blank" class="bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700 transition-colors font-semibold shadow-lg">
+                    <i class="fas fa-university mr-2"></i> Mecanismo Especial de Devolução (MED)
+                </a>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer id="footer" class="py-6 bg-blue-950 text-blue-200 mt-12 relative z-10">
+    <div class="container mx-auto px-6 text-center text-sm">
+        <p>
+            © 2025 SQG. Guia de Ação Imediata.
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>

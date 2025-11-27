@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQG | Segurança e Estratégia Digital</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Biblioteca Plotly para o gráfico -->
+    <script src="https://cdn.plot.ly/plotly-3.1.1.min.js"></script>
+    
+    <style>
+        /* Oculta a barra de rolagem para um visual mais limpo */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define a fonte Poppins como padrão para todos os elementos */
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* --- Gradientes de Fundo Customizados --- */
+        .ocean-gradient {
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 25%, #0369a1 50%, #0284c7 75%, #0ea5e9 100%);
+            background-attachment: fixed;
+        }
+
+        .deep-ocean {
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 25%, #2563eb 50%, #3b82f6 75%, #60a5fa 100%);
+        }
+
+        /* --- Efeito Glassmorphism Customizado --- */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* --- Animações da Hero Section (Bolhas e Tentáculo) --- */
+        @keyframes bubble {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { transform: translateY(50vh) scale(1); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(0); opacity: 0; }
+        }
+
+        @keyframes tentacle {
+            0%, 100% { transform: translateX(0px) rotate(0deg); }
+            25% { transform: translateX(10px) rotate(2deg); }
+            75% { transform: translateX(-10px) rotate(-2deg); }
+        }
+
+        /* Aplicação das Classes de Animação */
+        .bubble { animation: bubble 10s linear infinite; }
+        .tentacle { animation: tentacle 6s ease-in-out infinite; }
+
+        /* --- Animação de Scroll (Aparição) --- */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="ocean-gradient">
+
+<!-- HEADER: Fixo e com Glassmorphism -->
+<header id="header" class="fixed top-0 w-full z-50 glass-effect">
+    <nav class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
+                <img src="img/logo.png" 
+                    alt="SQG Logo" 
+                    class="h-10 w-10 object-contain rounded-full" 
+                    onerror="this.onerror=null; this.src='https://placehold.co/40x40/0ea5e9/ffffff?text=SQG';" />
+                <span class="text-white font-bold text-2xl leading-none">Será que é Golpe?</span>
+            </div>
+            
+            <!-- Navegação Desktop -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#service-hero" class="text-white hover:text-cyan-300 transition-colors">Home</a>
+                <a href="comunidade.html" class="text-white font-semibold hover:text-cyan-300 transition-colors">Comunidade</a>
+                <a href="#features-overview" class="text-white hover:text-cyan-300 transition-colors">Recursos</a>
+                <a href="#methodology-section" class="text-white hover:text-cyan-300 transition-colors">Como funciona</a>
+                <a href="#case-studies" class="text-white hover:text-cyan-300 transition-colors">Notícias</a>
+                <a href="parceiros.html" class="text-white hover:text-cyan-300 transition-colors">Parceiros</a> <!-- CORRIGIDO: Sem borda extra -->
+            </div>
+            
+            <!-- Botão CTA Desktop -->
+            <a href="paraempresas.html" class="hidden md:block bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-2 rounded-full hover:from-cyan-600 hover:to-blue-700 transition-all font-semibold shadow-lg">
+                Para Empresas
+            </a>
+
+            <!-- Botão Menu Mobile -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none" aria-label="Abrir Menu Principal">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Menu Mobile Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden glass-effect py-4 px-6">
+        <a href="#service-hero" class="block text-white py-2 hover:text-cyan-300 transition-colors border-b border-gray-700">Home</a>
+        <a href="comunidade.html" class="block text-white py-2 font-semibold hover:text-cyan-300 transition-colors border-b border-gray-700">Comunidade</a>
+        <a href="#features-overview" class="block text-white py-2 hover:text-cyan-300 transition-colors border-b border-gray-700">Recursos</a>
+        <a href="#methodology-section" class="block text-white py-2 hover:text-cyan-300 transition-colors border-b border-gray-700">Como funciona</a>
+        <a href="#case-studies" class="block text-white py-2 hover:text-cyan-300 transition-colors border-b border-gray-700">Notícias</a>
+        <a href="parceiros.html" class="block text-white py-2 hover:text-cyan-300 transition-colors border-b border-gray-700">Parceiros</a>
+        <a href="https://wa.me/5511999999999" class="w-full inline-block bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg mt-4 text-center">
+            Começar Agora
+        </a>
+    </div>
+</header>
+
+<!-- HERO SECTION: Fundo do Mar com Animações -->
+<section id="service-hero" class="relative h-[700px] overflow-hidden pt-24">
+    <!-- Fundo Deep Ocean -->
+    <div class="absolute inset-0 deep-ocean"></div>
+    
+    <!-- Bolhas de Animação -->
+    <div class="absolute top-20 left-10 w-20 h-20 bg-cyan-400 rounded-full opacity-30 bubble" style="animation-delay: 0s;"></div>
+    <div class="absolute top-40 right-20 w-12 h-12 bg-blue-300 rounded-full opacity-40 bubble" style="animation-delay: 2s;"></div>
+    <div class="absolute top-60 left-1/3 w-8 h-8 bg-cyan-300 rounded-full opacity-50 bubble" style="animation-delay: 4s;"></div>
+    <div class="absolute top-80 right-1/3 w-16 h-16 bg-blue-400 rounded-full opacity-35 bubble" style="animation-delay: 6s;"></div>
+    
+    <div class="container mx-auto px-6 h-full flex items-center relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="text-white animate-on-scroll">
+                <h1 class="text-6xl font-bold mb-6 leading-tight">
+                    Segurança digital para todas
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-300">
+                        Pessoas
+                    </span>
+                </h1>
+                <p class="text-xl mb-8 text-blue-100 leading-relaxed">
+                    Imagine milhares de tentáculos digitais trabalhando incansavelmente para proteger sua empresa contra ameaças cibernéticas.
+                </p>
+                <div class="flex space-x-4">
+                    <!-- Botão único: Falar com a Polly -->
+                    <a href="https://wa.me/5511999999999" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-xl">
+                        Falar com a Polly
+                    </a>
+                </div>
+            </div>
+            <!-- Imagem com animação Tentacle (Kraken) -->
+            <div class="relative animate-on-scroll" style="transition-delay: 0.2s;">
+                <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-full opacity-20 blur-3xl"></div>
+                <img class="w-full h-auto object-contain rounded-2xl tentacle" 
+                    src="img/kraken hd.png" 
+                    onerror="this.onerror=null; this.src='https://placehold.co/600x400/0ea5e9/ffffff?text=Kraken+Protetor';" 
+                    alt="Ilustração de um polvo Kraken roxo segurando um peixe, representando o domínio digital" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Recursos (Features Overview) -->
+<section id="features-overview" class="py-20 bg-gradient-to-b from-blue-900 to-blue-800">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16 animate-on-scroll">
+            <h2 class="text-4xl font-bold text-white mb-4">
+                Chega de cair em <span class="text-cyan-400">Golpes</span> no Oceano Digital
+            </h2>
+            <p class="text-xl text-blue-200 max-w-3xl mx-auto">
+                O Será que é Golpe? é a sua bússola confiável para navegar pelas águas turbulentas da internet, protegendo você e sua empresa contra fraudes digitais.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div id="feature-1" class="glass-effect rounded-xl p-6 hover:transform hover:scale-105 transition-all animate-on-scroll shadow-lg">
+                <div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-magnifying-glass text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-3">Detector de Golpe</h3>
+                <p class="text-blue-200 text-sm">Análise inteligente de links e páginas para identificar phishing e fraudes em tempo real.</p>
+            </div>
+            
+            <div id="feature-2" class="glass-effect rounded-xl p-6 hover:transform hover:scale-105 transition-all animate-on-scroll shadow-lg" style="transition-delay: 0.1s;">
+                <div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-newspaper text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-3">Detector de Fake News</h3>
+                <p class="text-blue-200 text-sm">Verificação de fontes e conteúdo para combater a desinformação e boatos online.</p>
+            </div>
+            
+            <div id="feature-3" class="glass-effect rounded-xl p-6 hover:transform hover:scale-105 transition-all animate-on-scroll shadow-lg" style="transition-delay: 0.2s;">
+                <div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-volume-high text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-3">Detector de Golpe por Áudio</h3>
+                <p class="text-blue-200 text-sm">Análise de mensagens de áudio suspeitas para identificar tentativas de clonagem de voz ou fraude.</p>
+            </div>
+            
+            <div id="feature-4" class="glass-effect rounded-xl p-6 hover:transform hover:scale-105 transition-all animate-on-scroll shadow-lg" style="transition-delay: 0.3s;">
+                <div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-message text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-3">Detector de Golpe por Mensagem</h3>
+                <p class="text-blue-200 text-sm">Avaliação de mensagens de texto e prints para detectar padrões de engenharia social e golpes de WhatsApp.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Benefícios e Gráfico (Impacto) -->
+<section id="benefits-section" class="py-20 bg-gradient-to-b from-blue-800 to-blue-900">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="animate-on-scroll">
+                <h2 class="text-4xl font-bold text-white mb-6">
+                    O Número de <span class="text-cyan-400">Pessoas</span> Atingidas Só Cresce
+                </h2>
+                <p class="text-xl text-blue-200 mb-8">
+                    Os números de golpes e fake news só aumentam a cada ano, e esses são fatores de risco: 
+                </p>
+                
+                <div class="space-y-6">
+                    <div id="benefit-1" class="flex items-start space-x-4 animate-on-scroll" style="transition-delay: 0.1s;">
+                        <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <i class="fas fa-people-group text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Famílias Afetadas</h3>
+                            <p class="text-blue-200">Famílias de baixa renda relatam já terem perdido o salário devido a golpes.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="benefit-2" class="flex items-start space-x-4 animate-on-scroll" style="transition-delay: 0.2s;">
+                        <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <i class="fas fa-lock-open text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Falta de Confiança Digital</h3>
+                            <p class="text-blue-200">Para essas pessoas a confiança na internet está abalada, dificultando o acesso a serviços essenciais.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="benefit-3" class="flex items-start space-x-4 animate-on-scroll" style="transition-delay: 0.3s;">
+                        <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <i class="fas fa-sack-dollar text-white"></i>
+                        </div>
+                        <div>
+                            <!-- Este é o elemento que será animado pelo JS -->
+                            <h3 class="text-xl font-semibold text-white mb-2">Já são mais de <span id="animated-value">R$ 0</span></h3>
+                            <p class="text-blue-200">R$ 2 Bilhões de perdas totais em golpes digitais para o último trimestre de 2025.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relative animate-on-scroll" style="transition-delay: 0.4s;">
+                <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-2xl opacity-20 blur-3xl"></div>
+                <!-- Gráfico Plotly -->
+                <div class="glass-effect rounded-2xl p-8 relative shadow-xl">
+                    <h3 class="text-2xl font-bold text-white mb-6">Impacto Mensurável</h3>
+                    <div id="impact-chart" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Metodologia (Como Funciona) -->
+<section id="methodology-section" class="py-20 bg-gradient-to-r from-blue-900 to-blue-800">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16 animate-on-scroll">
+            <h2 class="text-4xl font-bold text-white mb-4">
+                Conheça a <span class="text-cyan-400">Polly</span> e não caia mais em golpes!
+            </h2>
+            <p class="text-xl text-blue-200 max-w-3xl mx-auto">
+                O passo a passo é simples:
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div id="phase-1" class="relative animate-on-scroll">
+                <div class="glass-effect rounded-2xl p-8 h-full shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl shadow-lg">
+                            1
+                        </div>
+                        <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-6 mx-auto shadow-xl">
+                            <i class="fab fa-whatsapp text-white text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-4 text-center">Chame a Polly no WhatsApp</h3>
+                    </div>
+                    <!-- Botão do WhatsApp para Polly -->
+                    <div class="mt-auto">
+                        <a href="https://wa.me/5511999999999" 
+                            class="w-full inline-block bg-gradient-to-r from-green-400 to-green-600 text-white px-4 py-3 rounded-full text-sm font-bold hover:from-green-500 hover:to-green-700 transition-all shadow-xl text-center">
+                            <i class="fab fa-whatsapp mr-2"></i> Adicionar Polly
+                        </a>
+                        <p class="text-blue-200 text-xs mt-3 text-center">Toque para salvar o contato e iniciar a conversa.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="phase-2" class="relative animate-on-scroll" style="transition-delay: 0.2s;">
+                <div class="glass-effect rounded-2xl p-8 h-full shadow-lg">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl shadow-lg">
+                        2
+                    </div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-6 mx-auto shadow-xl">
+                        <i class="fas fa-paper-plane text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-4 text-center">Envie sua Mensagem</h3>
+                    <p class="text-blue-200 text-center">Envie um Print, áudio ou texto que você considera suspeito para a Polly.</p>
+                </div>
+            </div>
+            
+            <div id="phase-3" class="relative animate-on-scroll" style="transition-delay: 0.4s;">
+                <div class="glass-effect rounded-2xl p-8 h-full shadow-lg">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl shadow-lg">
+                        3
+                    </div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-6 mx-auto shadow-xl">
+                        <i class="fas fa-microchip text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-4 text-center">A Polly Analisa</h3>
+                    <p class="text-blue-200 text-center">Nossa IA realiza uma análise rápida e precisa de risco da sua mensagem.</p>
+                </div>
+            </div>
+            
+            <div id="phase-4" class="relative animate-on-scroll" style="transition-delay: 0.6s;">
+                <div class="glass-effect rounded-2xl p-8 h-full shadow-lg">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl shadow-lg">
+                        4
+                    </div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-6 mx-auto shadow-xl">
+                        <i class="fas fa-check-circle text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-4 text-center">Resultado</h3>
+                    <p class="text-blue-200 text-center">A Polly responde em segundos com a análise: se é golpe ou se é seguro.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Notícias -->
+<section id="case-studies" class="py-20 bg-gradient-to-b from-blue-800 to-blue-900">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16 animate-on-scroll">
+            <h2 class="text-4xl font-bold text-white mb-4">
+                Últimas <span class="text-cyan-400">Notícias</span> do Oceano Digital
+            </h2>
+            <p class="text-xl text-blue-200 max-w-3xl mx-auto">
+                Mantenha-se atualizado sobre as novas táticas de golpes e como se proteger.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Notícia 1: Golpe por IA -->
+            <div id="news-1" class="glass-effect rounded-2xl overflow-hidden hover:transform hover:scale-105 transition-all animate-on-scroll shadow-xl">
+                <div class="h-48 overflow-hidden">
+                    <img class="w-full h-full object-cover" 
+                        src="https://placehold.co/400x200/4c004c/ffffff?text=Golpe+IA+Voice+Clone" 
+                        alt="Imagem de IA e voz sintética" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x200/0c4a6e/ffffff?text=IA+%2B+Voz';" />
+                </div>
+                <div class="p-8">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <span class="px-3 py-1 bg-fuchsia-600 rounded-full text-white text-xs font-semibold">Inteligência Artificial</span>
+                        <span class="px-3 py-1 bg-red-600 rounded-full text-white text-xs font-semibold">Fraude</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">IA está sendo usada para Clonar Vozes e Aplicar Golpes em Idosos</h3>
+                    <p class="text-blue-200 text-sm mb-6">Relatório aponta aumento de 400% nos ataques que utilizam áudios sintéticos para simular urgências familiares.</p>
+                    <div class="flex justify-between items-center mb-6 text-sm">
+                        <div class="text-blue-300"><i class="fas fa-calendar-alt mr-2"></i> 15 de Nov, 2025</div>
+                        <div class="text-cyan-400 font-bold">Fonte: CyberSecurity BR</div>
+                    </div>
+                    <a href="artigo-ia-voz.html" class="w-full inline-block bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 rounded-full font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg text-center">
+                        Ler Notícia Completa
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Notícia 2: Phishing em Redes Sociais -->
+            <div id="news-2" class="glass-effect rounded-2xl overflow-hidden hover:transform hover:scale-105 transition-all animate-on-scroll shadow-xl" style="transition-delay: 0.2s;">
+                <div class="h-48 overflow-hidden">
+                    <img class="w-full h-full object-cover" 
+                        src="https://placehold.co/400x200/cc9900/ffffff?text=Phishing+Social+Media" 
+                        alt="Imagem de tela de celular e phishing" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x200/0c4a6e/ffffff?text=Redes+%2B+Fraude';" />
+                </div>
+                <div class="p-8">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <span class="px-3 py-1 bg-yellow-600 rounded-full text-white text-xs font-semibold">Redes Sociais</span>
+                        <span class="px-3 py-1 bg-red-600 rounded-full text-white text-xs font-semibold">Phishing</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Novo Golpe de Phishing Promete Prêmios Falsos no Instagram</h3>
+                    <p class="text-blue-200 text-sm mb-6">Milhares de usuários foram alvo de mensagens diretas contendo links maliciosos para roubo de credenciais.</p>
+                    <div class="flex justify-between items-center mb-6 text-sm">
+                        <div class="text-blue-300"><i class="fas fa-calendar-alt mr-2"></i> 10 de Nov, 2025</div>
+                        <div class="text-cyan-400 font-bold">Fonte: Mundo Digital</div>
+                    </div>
+                    <a href="artigo-phishing.html" class="w-full inline-block bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 rounded-full font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg text-center">
+                        Ler Notícia Completa
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Notícia 3: WhatsApp e Fake News -->
+            <div id="news-3" class="glass-effect rounded-2xl overflow-hidden hover:transform hover:scale-105 transition-all animate-on-scroll shadow-xl" style="transition-delay: 0.4s;">
+                <div class="h-48 overflow-hidden">
+                    <img class="w-full h-full object-cover" 
+                        src="https://placehold.co/400x200/008000/ffffff?text=WhatsApp+Fake+News" 
+                        alt="Imagem de celular com ícone de notícia falsa" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x200/0c4a6e/ffffff?text=WhatsApp+%2B+News';" />
+                </div>
+                <div class="p-8">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <span class="px-3 py-1 bg-green-600 rounded-full text-white text-xs font-semibold">Mensageiros</span>
+                        <span class="px-3 py-1 bg-blue-600 rounded-full text-white text-xs font-semibold">Desinformação</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Especialistas Alertam para Padrões de Fake News no WhatsApp</h3>
+                    <p class="text-blue-200 text-sm mb-6">Como identificar e denunciar correntes de mensagens que visam roubo de dados ou desestabilização social.</p>
+                    <div class="flex justify-between items-center mb-6 text-sm">
+                        <div class="text-blue-300"><i class="fas fa-calendar-alt mr-2"></i> 05 de Nov, 2025</div>
+                        <div class="text-cyan-400 font-bold">Fonte: InfoSec Today</div>
+                    </div>
+                    <a href="artigo-whatsapp-news.html" class="w-full inline-block bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 rounded-full font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg text-center">
+                        Ler Notícia Completa
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA para a página de notícias completa -->
+        <div class="text-center mt-12 animate-on-scroll" style="transition-delay: 0.6s;">
+            <a href="noticias.html" class="inline-block bg-gradient-to-r from-cyan-400 to-blue-500 text-white px-8 py-4 rounded-full text-lg font-bold hover:from-cyan-500 hover:to-blue-600 transition-all shadow-xl">
+                <i class="fas fa-arrow-right mr-3"></i> Ver Todas as Notícias
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- NOVA SEÇÃO: Preview de Parceiros na Home -->
+<section id="partners-preview" class="py-16 relative overflow-hidden bg-blue-900/80">
+    <!-- Fundo sutilmente diferente para separar -->
+    <div class="absolute inset-0 ocean-gradient opacity-50"></div>
+    
+    <div class="container mx-auto px-6 relative z-10 text-center animate-on-scroll">
+        <h2 class="text-3xl font-bold text-white mb-8">
+            Quem Navega com <span class="text-cyan-400">Segurança</span>
+        </h2>
+        <p class="text-blue-200 mb-10 max-w-2xl mx-auto">
+            Grandes empresas já confiam na tecnologia da SQG para proteger seus dados e clientes.
+        </p>
+        
+        <!-- Grid de Logos (Placeholders com opacidade para efeito elegante) -->
+        <div class="flex flex-wrap justify-center gap-8 md:gap-16 items-center mb-10 opacity-70 hover:opacity-100 transition-opacity duration-500">
+             <img src="https://placehold.co/120x60/transparent/ffffff?text=Alpha" alt="Parceiro 1" class="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all transform hover:scale-110">
+             <img src="https://placehold.co/120x60/transparent/ffffff?text=Beta+Corp" alt="Parceiro 2" class="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all transform hover:scale-110">
+             <img src="https://placehold.co/120x60/transparent/ffffff?text=TechShield" alt="Parceiro 3" class="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all transform hover:scale-110">
+             <img src="https://placehold.co/120x60/transparent/ffffff?text=DataSafe" alt="Parceiro 4" class="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all transform hover:scale-110">
+        </div>
+        
+        <a href="parceiros.html" class="inline-flex items-center text-cyan-300 font-semibold hover:text-white transition-colors group">
+            Conheça nossos Parceiros 
+            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+        </a>
+    </div>
+</section>
+
+<!-- SECTION: Call to Action Final -->
+<section id="cta-final" class="py-20 bg-gradient-to-r from-cyan-600 to-blue-700">
+    <div class="container mx-auto px-6 text-center animate-on-scroll">
+        <h2 class="text-4xl font-bold text-white mb-4">
+            Não caia mais em golpes! Proteja-se com a Polly Hoje Mesmo
+        </h2>
+        <p class="text-xl text-cyan-100 max-w-3xl mx-auto mb-8">
+            Adicione a Polly no seu WhatsApp e comece a navegar com segurança nas águas digitais.
+        </p>
+        <a href="https://wa.me/5511999999999" class="inline-block bg-white text-blue-900 px-10 py-4 rounded-full text-xl font-bold hover:bg-gray-200 transition-all shadow-xl">
+            <i class="fab fa-whatsapp mr-3"></i> Adicionar Polly no WhatsApp
+        </a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer" class="py-12 bg-blue-950 text-blue-200">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-gray-700 pb-8 mb-8">
+            
+            <!-- Coluna 1: Logo e Social -->
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <img src="img/logo.png" 
+                        alt="SQG Logo" 
+                        class="h-10 w-10 object-contain rounded-full" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/40x40/0ea5e9/ffffff?text=SQG';" />
+                    <span class="text-white font-bold text-xl">SQG</span>
+                </div>
+                <p class="text-sm">Proteção e segurança digital para todos navegarem com confiança no mercado digital.</p>
+                <div class="flex space-x-4 mt-4">
+                    <a href="#" class="text-blue-300 hover:text-cyan-400 transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
+                    <a href="#" class="text-blue-300 hover:text-cyan-400 transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                    <a href="#" class="text-blue-300 hover:text-cyan-400 transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+                </div>
+            </div>
+            
+            <!-- Coluna 2: Navegação -->
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-4">Navegação</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#service-hero" class="hover:text-white transition-colors">Home</a></li>
+                    <li><a href="comunidade.html" class="hover:text-white transition-colors">Comunidade</a></li>
+                    <li><a href="#features-overview" class="hover:text-white transition-colors">Recursos</a></li>
+                    <li><a href="#methodology-section" class="hover:text-white transition-colors">Metodologia</a></li>
+                    <li><a href="#case-studies" class="hover:text-white transition-colors">Notícias</a></li>
+                    <li><a href="parceiros.html" class="hover:text-white transition-colors text-cyan-400 font-semibold">Parceiros</a></li> <!-- Link Adicionado -->
+                </ul>
+            </div>
+            
+            <!-- Coluna 3: Legal -->
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-4">Legal</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-white transition-colors">Termos de Serviço</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Política de Privacidade</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Cookies</a></li>
+                </ul>
+            </div>
+            
+            <!-- Coluna 4: Contato -->
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-4">Fale Conosco</h4>
+                <p class="text-sm mb-2"><i class="fas fa-envelope mr-2 text-cyan-400"></i> contato@sqg.com</p>
+                <p class="text-sm mb-2"><i class="fas fa-phone mr-2 text-cyan-400"></i> (00) 1234-5678</p>
+                <p class="text-sm"><i class="fas fa-map-marker-alt mr-2 text-cyan-400"></i> Av. Oceânica, 1000, SP</p>
+            </div>
+        </div>
+        
+        <div class="text-center text-sm">
+            &copy; 2025 SQG. Todos os direitos reservados.
+        </div>
+    </div>
+</footer>
+
+<script>
+    // 1. Configuração do Plotly para o gráfico
+    var data = [{
+        x: ['T1 2024', 'T2 2024', 'T3 2024', 'T4 2024', 'T1 2025', 'T2 2025'], // Trimestres
+        y: [0.5, 0.75, 1.1, 1.5, 1.8, 2.0], // Valores em BILHÕES (para simplificar a exibição)
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: {
+            color: '#0ea5e9', // ciano-400
+            width: 4
+        },
+        marker: {
+            color: 'white',
+            size: 10,
+            symbol: 'circle',
+            line: {
+                color: '#0ea5e9',
+                width: 2
+            }
+        },
+        name: 'Perdas por Golpes (Bi)'
+    }];
+
+    var layout = {
+        title: {
+            text: 'Crescimento de Perdas por Golpes (R$ Bilhões)',
+            font: {
+                color: 'white'
+            }
+        },
+        // Ajuste de cores para o tema dark/ocean
+        plot_bgcolor: 'rgba(255, 255, 255, 0.05)',
+        paper_bgcolor: 'transparent',
+        xaxis: {
+            title: 'Período',
+            color: '#93c5fd', // azul-300
+            gridcolor: 'rgba(255, 255, 255, 0.1)',
+            zerolinecolor: 'rgba(255, 255, 255, 0.1)'
+        },
+        yaxis: {
+            title: 'Perdas Totais (R$ Bilhões)',
+            color: '#93c5fd', // azul-300
+            gridcolor: 'rgba(255, 255, 255, 0.1)',
+            zerolinecolor: 'rgba(255, 255, 255, 0.1)',
+            range: [0, 2.2], // Ajusta o range do Y para comportar os 2 Bilhões
+            tickprefix: 'R$ ', 
+            tickformat: '.1f', // Uma casa decimal
+            ticksuffix: ' Bi' // Adiciona sufixo de Bilhões
+        }
+    };
+
+    Plotly.newPlot('impact-chart', data, layout, {displayModeBar: false});
+
+
+    // 2. Script para Menu Mobile (Funcionalidade)
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // 3. Script para Animação de Scroll (Animate-on-scroll) e Contador
+    document.addEventListener('DOMContentLoaded', () => {
+        const animatedValueElement = document.getElementById('animated-value');
+        const targetValue = 2000; // Valor final em milhões (representa 2 Bilhões)
+        const duration = 1500; // ms
+
+        // Função para animar o contador
+        const startCounterAnimation = (target) => {
+            let start = 0;
+            const step = Math.ceil(duration / 20); // 20ms steps
+
+            const interval = setInterval(() => {
+                start += targetValue / step;
+                if (start >= targetValue) {
+                    clearInterval(interval);
+                    target.textContent = 'R$ 2 Bilhões';
+                } else {
+                    // Formata para R$ X.X Bi
+                    const displayValue = (start / 1000).toFixed(1); 
+                    target.textContent = `R$ ${displayValue} Bi`;
+                }
+            }, duration / step);
+        };
+
+        // Configuração do Intersection Observer para as animações de scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.2 // O elemento é considerado visível quando 20% dele estiver na viewport
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.target.id === 'benefit-3' && entry.isIntersecting) {
+                    // Dispara a animação do contador quando o elemento for visível
+                    startCounterAnimation(animatedValueElement);
+                    observer.unobserve(entry.target); // Não precisa observar mais
+                }
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Não para de observar para que a animação possa se repetir se o usuário rolar para cima/baixo
+                }
+            });
+        }, observerOptions);
+
+        // Aplica o observador a todos os elementos com a classe 'animate-on-scroll'
+        const elements = document.querySelectorAll('.animate-on-scroll');
+        elements.forEach(el => observer.observe(el));
+    });
+</script>
+
+</body>
+</html>

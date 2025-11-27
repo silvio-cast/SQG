@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQG | Notícias sobre Golpes</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-3.1.1.min.js"></script>
+    
+    <style>
+        /* Estilos globais e gradientes (mantidos de index.html) */
+        ::-webkit-scrollbar { display: none; }
+        * { font-family: 'Poppins', sans-serif; }
+
+        .ocean-gradient {
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 25%, #0369a1 50%, #0284c7 75%, #0ea5e9 100%);
+            background-attachment: fixed;
+        }
+
+        .deep-ocean {
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 25%, #2563eb 50%, #3b82f6 75%, #60a5fa 100%);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Animações (mantidas de index.html) */
+        @keyframes fadeInRise {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="ocean-gradient">
+
+<!-- HEADER: Fixo e com Glassmorphism (Copiado de index.html) -->
+<header id="header" class="fixed top-0 w-full z-50 glass-effect">
+    <nav class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            
+            <div class="flex items-center space-x-3">
+                <img src="img/logo.png" 
+                    alt="SQG Logo" 
+                    class="h-10 w-10 object-contain rounded-full" 
+                    onerror="this.onerror=null; this.src='https://placehold.co/40x40/0ea5e9/ffffff?text=SQG';" />
+                <span class="text-white font-bold text-2xl leading-none">Será que é Golpe?</span>
+            </div>
+            
+            <!-- Navegação Desktop (Link para Notícias adicionado) -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="text-white hover:text-cyan-300 transition-colors">Home</a>
+                <a href="#news-section" class="text-cyan-300 font-semibold transition-colors">Notícias</a>
+                <a href="index.html#features-overview" class="text-white hover:text-cyan-300 transition-colors">Recursos</a>
+                <a href="index.html#methodology-section" class="text-white hover:text-cyan-300 transition-colors">Como funciona</a>
+                <a href="index.html#footer" class="text-white hover:text-cyan-300 transition-colors">Contato</a>
+            </div>
+            
+            <button class="hidden md:block bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-2 rounded-full hover:from-cyan-600 hover:to-blue-700 transition-all font-semibold shadow-lg">
+                Começar Agora
+            </button>
+
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Menu Mobile Dropdown (Link para Notícias adicionado) -->
+    <div id="mobile-menu" class="hidden md:hidden glass-effect py-4 px-6">
+        <a href="index.html" class="block text-white py-2 hover:text-cyan-300 transition-colors border-b border-gray-700">Home</a>
+        <a href="#news-section" class="block text-cyan-300 font-semibold py-2 transition-colors border-b border-gray-700">Notícias</a>
+        <a href="index.html#features-overview" class="block text-white py-2 hover:text-cyan-300 transition-colors border-b border-gray-700">Recursos</a>
+        <a href="index.html#methodology-section" class="block text-white py-2 hover:text-cyan-300 transition-colors border-b border-gray-700">Como funciona</a>
+        <a href="index.html#footer" class="block text-white py-2 hover:text-cyan-300 transition-colors mb-4">Contato</a>
+        <button class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
+            Começar Agora
+        </button>
+    </div>
+</header>
+
+<!-- HERO SECTION - Notícias -->
+<section id="news-hero" class="relative h-[400px] overflow-hidden pt-24 deep-ocean flex items-center">
+    <div class="container mx-auto px-6 relative z-10 text-center animate-on-scroll">
+        <h1 class="text-5xl font-bold text-white mb-4">
+            Mundo dos <span class="text-cyan-400">Golpes</span>: Notícias e Alertas
+        </h1>
+        <p class="text-xl text-blue-200 max-w-2xl mx-auto">
+            Mantenha-se informado sobre as novas táticas de fraude e proteja-se no oceano digital.
+        </p>
+    </div>
+</section>
+
+<!-- SECTION: Lista de Notícias -->
+<section id="news-section" class="py-20 bg-gradient-to-b from-blue-900 to-blue-800">
+    <div class="container mx-auto px-6">
+        
+        <!-- Filtros (Exemplo) -->
+        <div class="flex flex-wrap justify-center space-x-4 mb-12 animate-on-scroll">
+            <span class="text-white font-semibold mr-4 hidden sm:block">Filtro Rápido:</span>
+            <button class="px-4 py-2 text-sm rounded-full bg-cyan-600 text-white hover:bg-cyan-700 transition-colors shadow-md">Todos</button>
+            <button class="px-4 py-2 text-sm rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-colors shadow-md">Phishing</button>
+            <button class="px-4 py-2 text-sm rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-colors shadow-md">Deepfake</button>
+            <button class="px-4 py-2 text-sm rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-colors shadow-md">WhatsApp</button>
+        </div>
+
+        <!-- Grid de Artigos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+            <!-- Artigo 1: Deepfake (Polvo Laranja) -->
+            <div class="glass-effect rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-xl animate-on-scroll">
+                <div class="h-56 overflow-hidden">
+                    <!-- Placeholder: Kraken Deepfake -->
+                    <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+                        src="https://storage.googleapis.com/uxpilot-auth.appspot.com/0f2133241c-c04bff364cefdfa93abc.png" 
+                        alt="Kraken Deepfake Laranja" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x224/f97316/ffffff?text=DEEPFAKE+GOLPE';" />
+                </div>
+                <div class="p-6">
+                    <span class="text-xs text-blue-300">15 de Nov, 2025</span>
+                    <h3 class="text-2xl font-bold text-white my-2">
+                        Alerta Global: Deepfake de Voz Aumenta 300% em Golpes Bancários
+                    </h3>
+                    <p class="text-blue-200 mb-4 text-sm">
+                        Criminosos estão utilizando inteligência artificial para clonar vozes de familiares e executivos. Saiba como se proteger.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">
+                        Ler Mais <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Artigo 2: Phishing (Polvo Verde) -->
+            <div class="glass-effect rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-xl animate-on-scroll" style="transition-delay: 0.1s;">
+                <div class="h-56 overflow-hidden">
+                    <!-- Placeholder: Kraken Phishing -->
+                    <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+                        src="https://storage.googleapis.com/uxpilot-auth.appspot.com/0f2133241c-c04bff364cefdfa93abc.png" 
+                        alt="Kraken Phishing Verde" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x224/10b981/ffffff?text=PHISHING+EMAIL';" />
+                </div>
+                <div class="p-6">
+                    <span class="text-xs text-blue-300">14 de Nov, 2025</span>
+                    <h3 class="text-2xl font-bold text-white my-2">
+                        Nova Onda de Phishing no WhatsApp Promete Férias Grátis
+                    </h3>
+                    <p class="text-blue-200 mb-4 text-sm">
+                        Links maliciosos são enviados prometendo prêmios ou viagens. Clique e perca seus dados bancários.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">
+                        Ler Mais <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Artigo 3: Fraude PIX (Polvo Vermelho) -->
+            <div class="glass-effect rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-xl animate-on-scroll" style="transition-delay: 0.2s;">
+                <div class="h-56 overflow-hidden">
+                    <!-- Placeholder: Kraken Fraude PIX -->
+                    <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+                        src="https://storage.googleapis.com/uxpilot-auth.appspot.com/0f2133241c-c04bff364cefdfa93abc.png" 
+                        alt="Kraken Fraude PIX Vermelho" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x224/ef4444/ffffff?text=FRAUDE+PIX';" />
+                </div>
+                <div class="p-6">
+                    <span class="text-xs text-blue-300">12 de Nov, 2025</span>
+                    <h3 class="text-2xl font-bold text-white my-2">
+                        A Tática do Falso Erro no PIX: Como Está Drenando Contas
+                    </h3>
+                    <p class="text-blue-200 mb-4 text-sm">
+                        Usuários recebem mensagens afirmando que um PIX foi feito "por engano" e são instruídos a devolver o valor. É um golpe.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">
+                        Ler Mais <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Artigo 4: Malware (Polvo Cinza) -->
+            <div class="glass-effect rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-xl animate-on-scroll" style="transition-delay: 0.3s;">
+                <div class="h-56 overflow-hidden">
+                    <!-- Placeholder: Kraken Malware -->
+                    <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+                        src="https://storage.googleapis.com/uxpilot-auth.appspot.com/0f2133241c-c04bff364cefdfa93abc.png" 
+                        alt="Kraken Malware Cinza" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x224/6b7280/ffffff?text=MALWARE+MÓVEL';" />
+                </div>
+                <div class="p-6">
+                    <span class="text-xs text-blue-300">10 de Nov, 2025</span>
+                    <h3 class="text-2xl font-bold text-white my-2">
+                        Novo Malware Móvel Se Esconde em Apps Populares de Jogos
+                    </h3>
+                    <p class="text-blue-200 mb-4 text-sm">
+                        Ameaça disfarçada rouba credenciais de acesso ao sistema bancário através de permissões concedidas pelo usuário.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">
+                        Ler Mais <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Artigo 5: Fake News Eleições (Polvo Azul Claro) -->
+            <div class="glass-effect rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-xl animate-on-scroll" style="transition-delay: 0.4s;">
+                <div class="h-56 overflow-hidden">
+                    <!-- Placeholder: Kraken Fake News -->
+                    <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+                        src="https://storage.googleapis.com/uxpilot-auth.appspot.com/0f2133241c-c04bff364cefdfa93abc.png" 
+                        alt="Kraken Fake News Azul Claro" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x224/38bdf8/ffffff?text=FAKE+NEWS';" />
+                </div>
+                <div class="p-6">
+                    <span class="text-xs text-blue-300">08 de Nov, 2025</span>
+                    <h3 class="text-2xl font-bold text-white my-2">
+                        Campanhas de Desinformação Têm o Foco em Mídias Sociais
+                    </h3>
+                    <p class="text-blue-200 mb-4 text-sm">
+                        O uso de bots e contas falsas para espalhar boatos sobre eventos importantes. Fique atento às fontes.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">
+                        Ler Mais <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Artigo 6: Ransomware (Polvo Roxo) -->
+            <div class="glass-effect rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-xl animate-on-scroll" style="transition-delay: 0.5s;">
+                <div class="h-56 overflow-hidden">
+                    <!-- Placeholder: Kraken Ransomware -->
+                    <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+                        src="https://storage.googleapis.com/uxpilot-auth.appspot.com/0f2133241c-c04bff364cefdfa93abc.png" 
+                        alt="Kraken Ransomware Roxo" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x224/8b5cf6/ffffff?text=RANSOMWARE+DATA';" />
+                </div>
+                <div class="p-6">
+                    <span class="text-xs text-blue-300">05 de Nov, 2025</span>
+                    <h3 class="text-2xl font-bold text-white my-2">
+                        Ataques de Ransomware Miram Pequenos Empreendedores
+                    </h3>
+                    <p class="text-blue-200 mb-4 text-sm">
+                        Empresas sem estrutura robusta de TI se tornam alvos fáceis de sequestro de dados e extorsão digital.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">
+                        Ler Mais <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Paginação (Exemplo) -->
+        <div class="flex justify-center mt-16 animate-on-scroll">
+            <button class="bg-cyan-600 text-white px-4 py-2 rounded-full mx-2 font-bold hover:bg-cyan-700 transition-colors shadow-md">1</button>
+            <button class="bg-blue-700 text-white px-4 py-2 rounded-full mx-2 hover:bg-blue-800 transition-colors shadow-md">2</button>
+            <button class="bg-blue-700 text-white px-4 py-2 rounded-full mx-2 hover:bg-blue-800 transition-colors shadow-md">3</button>
+            <button class="bg-blue-700 text-white px-4 py-2 rounded-full mx-2 hover:bg-blue-800 transition-colors shadow-md">Próximo <i class="fas fa-chevron-right ml-1 text-sm"></i></button>
+        </div>
+
+    </div>
+</section>
+
+<!-- SECTION: Call to Action Final (Copiado de index.html) -->
+<section id="cta-final" class="py-20 bg-gradient-to-r from-cyan-600 to-blue-700">
+    <div class="container mx-auto px-6 text-center animate-on-scroll">
+        <h2 class="text-4xl font-bold text-white mb-4">
+            Não caia mais em golpes! Proteja-se com a Polly Hoje Mesmo
+        </h2>
+        <p class="text-xl text-cyan-100 max-w-3xl mx-auto mb-8">
+            Adicione a Polly no seu WhatsApp e comece a navegar com segurança nas águas digitais.
+        </p>
+        <button class="bg-white text-blue-900 px-10 py-4 rounded-full text-xl font-bold hover:bg-gray-200 transition-all shadow-xl">
+            <i class="fab fa-whatsapp mr-3"></i> Adicionar Polly no WhatsApp
+        </button>
+    </div>
+</section>
+
+<!-- FOOTER (Copiado de index.html) -->
+<footer id="footer" class="py-12 bg-blue-950 text-blue-200">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-gray-700 pb-8 mb-8">
+            
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <img src="img/logo.png" 
+                        alt="SQG Logo" 
+                        class="h-10 w-10 object-contain rounded-full" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/40x40/0ea5e9/ffffff?text=SQG';" />
+                    <span class="text-white font-bold text-xl">SQG</span>
+                </div>
+                <p class="text-sm">Proteção e segurança digital para todos navegarem com confiança no mercado digital.</p>
+                <div class="flex space-x-4 mt-4">
+                    <a href="#" class="text-blue-300 hover:text-cyan-400 transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
+                    <a href="#" class="text-blue-300 hover:text-cyan-400 transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                    <a href="#" class="text-blue-300 hover:text-cyan-400 transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-4">Navegação</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                    <li><a href="#news-section" class="hover:text-white transition-colors">Notícias</a></li>
+                    <li><a href="index.html#features-overview" class="hover:text-white transition-colors">Recursos</a></li>
+                    <li><a href="index.html#methodology-section" class="hover:text-white transition-colors">Metodologia</a></li>
+                    <li><a href="index.html#case-studies" class="hover:text-white transition-colors">Casos de Sucesso</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-4">Legal</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-white transition-colors">Termos de Serviço</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Política de Privacidade</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Cookies</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="text-lg font-semibold text-white mb-4">Fale Conosco</h4>
+                <p class="text-sm mb-2"><i class="fas fa-envelope mr-2 text-cyan-400"></i> contato@sqg.com</p>
+                <p class="text-sm mb-2"><i class="fas fa-phone mr-2 text-cyan-400"></i> (00) 1234-5678</p>
+                <p class="text-sm"><i class="fas fa-map-marker-alt mr-2 text-cyan-400"></i> Av. Oceânica, 1000, SP</p>
+            </div>
+        </div>
+        
+        <div class="text-center text-sm">
+            &copy; 2025 SQG. Todos os direitos reservados.
+        </div>
+    </div>
+</footer>
+
+<script>
+    // 1. Script para Menu Mobile (Funcionalidade)
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // 2. Script para Animação de Scroll (Animate-on-scroll)
+    document.addEventListener('DOMContentLoaded', () => {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.2 // O elemento é considerado visível quando 20% dele estiver na viewport
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Opcional: Para executar a animação apenas uma vez
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        // Aplica o observador a todos os elementos com a classe 'animate-on-scroll'
+        const elements = document.querySelectorAll('.animate-on-scroll');
+        elements.forEach(el => observer.observe(el));
+    });
+</script>
+
+</body>
+</html>

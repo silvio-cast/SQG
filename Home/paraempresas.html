@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQG | Soluções de Segurança para Empresas</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. Reset e Esconder Scrollbar */
+        ::-webkit-scrollbar { 
+            display: none;
+        }
+
+        /* 2. Fonte Global */
+        * { 
+            font-family: 'Poppins', sans-serif; 
+        }
+
+        /* 3. Gradientes de Fundo */
+        .ocean-gradient {
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 25%, #0369a1 50%, #0284c7 75%, #0ea5e9 100%);
+            background-attachment: fixed;
+        }
+
+        .deep-ocean {
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 25%, #2563eb 50%, #3b82f6 75%, #60a5fa 100%);
+        }
+
+        /* 4. Efeito Glassmorphism (Vidro) */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* 5. Animações Keyframes */
+        @keyframes bubble {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { transform: translateY(50vh) scale(1); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(0); opacity: 0; }
+        }
+
+        @keyframes tentacle {
+            0%, 100% { transform: translateX(0px) rotate(0deg); }
+            25% { transform: translateX(10px) rotate(2deg); }
+            75% { transform: translateX(-10px) rotate(-2deg); }
+        }
+
+        /* 6. Aplicação das Classes de Animação */
+        .bubble { animation: bubble 10s linear infinite; }
+        .tentacle { animation: tentacle 6s ease-in-out infinite; }
+
+        /* 7. Estilização do Select */
+        select option {
+            color: #0c4a6e; /* Azul Escuro */
+            background-color: #f0f9ff; /* Azul Claro */
+        }
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3e%3cpolyline points="6 9 12 15 18 9"%3e%3c/polyline%3e%3c/svg%3e');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+    </style>
+</head>
+<body class="ocean-gradient min-h-screen pt-24">
+
+<!-- HEADER: Fixo e com Glassmorphism -->
+<header id="header" class="fixed top-0 w-full z-50 glass-effect">
+    <nav class="container mx-auto px-6 py-4 relative">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3 h-12">
+                <!-- Logo ajustado para o contexto de segurança SQG -->
+                <img src="img/logo.png" 
+                    alt="SQG Logo" 
+                    class="h-10 w-10 object-contain rounded-full" 
+                    onerror="this.onerror=null; this.src='https://placehold.co/40x40/0ea5e9/ffffff?text=SQG';" />
+                <span class="text-white font-bold text-2xl leading-none">SQG | Empresas</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <!-- Links específicos para B2B -->
+                <a href="index.html" class="text-white hover:text-cyan-300 transition-colors">Home</a>
+                <a href="#solutions" class="text-white hover:text-cyan-300 transition-colors">Soluções</a>
+                <a href="#compliance" class="text-white hover:text-cyan-300 transition-colors">Compliance</a>
+                <a href="#results" class="text-white hover:text-cyan-300 transition-colors">Resultados</a>
+                <a href="#contact" class="text-white hover:text-cyan-300 transition-colors">Contato</a>
+            </div>
+            <!-- CTA com cores da Home (ciano/azul) -->
+            <a href="#contact" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-2 rounded-full hover:from-cyan-600 hover:to-blue-700 transition-all font-semibold">
+                Proteger Minha Empresa
+            </a>
+        </div>
+    </nav>
+</header>
+
+<!-- HERO SECTION: Foco Empresarial -->
+<section id="hero" class="relative h-[800px] overflow-hidden">
+    <div class="absolute inset-0 deep-ocean"></div>
+    
+    <!-- Bolhas e Tentáculo (Animações Mantidas) -->
+    <div class="absolute top-20 left-10 w-20 h-20 bg-cyan-400 rounded-full opacity-30 bubble" style="animation-delay: 0s;"></div>
+    <div class="absolute top-40 right-20 w-12 h-12 bg-blue-300 rounded-full opacity-40 bubble" style="animation-delay: 2s;"></div>
+    <div class="absolute top-60 left-1/3 w-8 h-8 bg-cyan-300 rounded-full opacity-50 bubble" style="animation-delay: 4s;"></div>
+    <div class="absolute top-80 right-1/3 w-16 h-16 bg-blue-400 rounded-full opacity-35 bubble" style="animation-delay: 6s;"></div>
+    
+    <div class="container mx-auto px-6 h-full flex items-center relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="text-white">
+                <h1 class="text-6xl font-bold mb-6 leading-tight">
+                    Blindagem de <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-300">Ativos</span> e Pessoas
+                </h1>
+                <p class="text-xl mb-8 text-blue-100 leading-relaxed">
+                    Navegue o mercado digital com risco zero. Oferecemos a primeira linha de defesa contra fraudes internas e externas, protegendo sua operação 24/7.
+                </p>
+                <div class="flex space-x-4">
+                    <!-- Botão CTA com cores da Home (ciano/azul) -->
+                    <a href="#solutions" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
+                        Ver Soluções Corporativas
+                    </a>
+                    <a href="#contact" class="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-blue-900 transition-all">
+                        Falar com Consultor
+                    </a>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-full opacity-20 blur-3xl"></div>
+                <!-- Imagem adaptada: foco em segurança e dados (substituindo a antiga) -->
+                <img class="w-full h-auto object-contain rounded-2xl tentacle" 
+                    src="img/kraken hd.png" 
+                    onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e40af/ffffff?text=Kraken+Protegendo+Dados';" 
+                    alt="Ilustração de um Kraken protegendo servidores de dados" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Soluções Focadas em Segurança (Antiga #services) -->
+<section id="solutions" class="py-20 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-900 to-blue-800"></div>
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-bold text-white mb-6">
+                Nossas <span class="text-cyan-400">Soluções</span> de Defesa
+            </h2>
+            <p class="text-xl text-blue-200 max-w-3xl mx-auto">
+                Implementamos defesas robustas para que sua empresa navegue com total tranquilidade.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- 1. Cyber Segurança Proativa -->
+            <div class="glass-effect rounded-2xl p-8 hover:transform hover:scale-105 transition-all duration-300 shadow-xl">
+                <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-6 tentacle">
+                    <i class="fas fa-shield-halved text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-4">Cyber Segurança Inteligente</h3>
+                <p class="text-blue-200 mb-6">Proteção de ponta a ponta contra phishing, ransomware e ataques de engenharia social.</p>
+                <ul class="text-blue-300 space-y-2">
+                    <li><i class="fas fa-check text-cyan-400 mr-2"></i> Monitoramento de Ameaças 24/7</li>
+                    <li><i class="fas fa-check text-cyan-400 mr-2"></i> Prevenção de Fraudes em PIX</li>
+                    <li><i class="fas fa-check text-cyan-400 mr-2"></i> Defesa Anti-Clonagem de Voz</li>
+                </ul>
+            </div>
+            
+            <!-- 2. Gestão e Consultoria de Risco -->
+            <div class="glass-effect rounded-2xl p-8 hover:transform hover:scale-105 transition-all duration-300 shadow-xl" style="transition-delay: 0.2s;">
+                <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-6 tentacle">
+                    <i class="fas fa-file-contract text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-4">Consultoria e Compliance</h3>
+                <p class="text-blue-200 mb-6">Análise completa de vulnerabilidades e adequação da sua empresa às normas de LGPD e segurança.</p>
+                <ul class="text-blue-300 space-y-2">
+                    <li><i class="fas fa-check text-cyan-400 mr-2"></i> Auditoria de Segurança</li>
+                    <li><i class="fas fa-check text-cyan-400 mr-2"></i> Plano de Resposta a Incidentes</li>
+                    <li><i class="fas fa-check text-cyan-400 mr-2"></i> Adequação à LGPD</li>
+                </ul>
+            </div>
+            
+            <!-- 3. Treinamento Corporativo (Foco em Pessoas) -->
+            <div class="glass-effect rounded-2xl p-8 hover:transform hover:scale-105 transition-all duration-300 shadow-xl" style="transition-delay: 0.4s;">
+                <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mb-6 tentacle">
+                    <i class="fas fa-users-viewfinder text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-4">Treinamento Antifraude</h3>
+                <p class="text-blue-200 mb-6">Treine sua equipe para ser a primeira barreira de defesa contra qualquer ataque digital.</p>
+                <ul class="text-blue-300 space-y-2">
+                    <li><i class="fas fa-check text-cyan-400 mr-2"></i> Simulações de Phishing</li>
+                    <li><i class="fas fa-check text-cyan-400 mr-2"></i> Workshops de Engenharia Social</li>
+                    <li><i class="fas fa-check text-cyan-400 mr-2"></i> Cultura de Segurança Contínua</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Compliance e Risco (Nova Seção) -->
+<section id="compliance" class="py-20 bg-gradient-to-b from-blue-800 to-blue-900">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            <!-- Texto sobre LGPD e Risco -->
+            <div>
+                <h2 class="text-4xl font-bold text-white mb-6">
+                    Mantenha o <span class="text-cyan-400">Compliance</span> e Reduza o Risco Legal
+                </h2>
+                <p class="text-xl text-blue-200 mb-8">
+                    Em um mar de regulamentações, garantimos que sua empresa navegue dentro das normas, evitando multas e danos reputacionais. Nossas ferramentas mapeiam e mitigam riscos em tempo real.
+                </p>
+                
+                <ul class="space-y-4 text-white">
+                    <li class="flex items-start space-x-3">
+                        <i class="fas fa-gavel text-cyan-400 text-2xl flex-shrink-0 mt-1"></i>
+                        <div>
+                            <h4 class="font-semibold">Adequação à LGPD</h4>
+                            <p class="text-blue-300 text-sm">Proteja os dados dos seus clientes e evite sanções severas.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start space-x-3">
+                        <i class="fas fa-chart-area text-cyan-400 text-2xl flex-shrink-0 mt-1"></i>
+                        <div>
+                            <h4 class="font-semibold">Relatórios de Vulnerabilidade</h4>
+                            <p class="text-blue-300 text-sm">Análise periódica para identificar e corrigir falhas antes dos invasores.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start space-x-3">
+                        <i class="fas fa-user-lock text-cyan-400 text-2xl flex-shrink-0 mt-1"></i>
+                        <div>
+                            <h4 class="font-semibold">Proteção de Identidade Corporativa</h4>
+                            <p class="text-blue-300 text-sm">Defesa contra ataques de spear phishing direcionados à alta gestão.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Imagem/Placeholder de Compliance -->
+            <div class="relative glass-effect p-8 rounded-2xl shadow-xl">
+                <div class="h-96 bg-blue-900/50 rounded-lg flex items-center justify-center">
+                    <div class="text-center">
+                        <i class="fas fa-scale-balanced text-cyan-400 text-6xl mb-4"></i>
+                        <p class="text-white text-xl font-semibold">Compliance e Governança</p>
+                        <p class="text-blue-200">Defendendo sua reputação.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Resultados (Antiga #stats) -->
+<section id="results" class="py-20 bg-gradient-to-r from-blue-900 to-blue-800 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-900 to-blue-800"></div>
+    
+    <div class="absolute top-10 left-10 w-32 h-32 bg-cyan-400 rounded-full opacity-10 bubble"></div>
+    <div class="absolute bottom-10 right-10 w-24 h-24 bg-blue-300 rounded-full opacity-15 bubble" style="animation-delay: 3s;"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="text-center">
+                <div class="text-5xl font-bold text-cyan-400 mb-2">12M+</div>
+                <div class="text-white text-lg">Fraudes Evitadas/Mês</div>
+            </div>
+            <div class="text-center" style="animation-delay: 0.2s;">
+                <div class="text-5xl font-bold text-cyan-400 mb-2">99.9%</div>
+                <div class="text-white text-lg">Taxa de Detecção</div>
+            </div>
+            <div class="text-center" style="animation-delay: 0.4s;">
+                <div class="text-5xl font-bold text-cyan-400 mb-2">100%</div>
+                <div class="text-white text-lg">Adequação Legal (LGPD)</div>
+            </div>
+            <div class="text-center" style="animation-delay: 0.6s;">
+                <div class="text-5xl font-bold text-cyan-400 mb-2">5 min</div>
+                <div class="text-white text-lg">Tempo Médio de Resposta</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Testemunhos de Clientes (Antiga #testimonials) -->
+<section id="testimonials" class="py-20 bg-gradient-to-b from-blue-800 to-blue-900">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-bold text-white mb-6">
+                Líderes que <span class="text-cyan-400">Confiam</span>
+            </h2>
+            <p class="text-xl text-blue-200 max-w-3xl mx-auto">
+                Depoimentos de CEOs e diretores que blindaram suas empresas com o SQG.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="glass-effect rounded-2xl p-8 shadow-xl">
+                <div class="flex items-center mb-6">
+                    <img src="https://placehold.co/64x64/0ea5e9/ffffff?text=M" onerror="this.onerror=null; this.src='https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg';" alt="Cliente Marina Silva" class="w-16 h-16 rounded-full mr-4">
+                    <div>
+                        <h4 class="text-white font-semibold">Dr. Eduardo Ferraz</h4>
+                        <p class="text-blue-300">Diretor de Risco, Fintech XPTO</p>
+                    </div>
+                </div>
+                <p class="text-blue-200 italic">
+                    "O SQG reduziu nossas perdas com fraudes em 80% no primeiro trimestre. Sua inteligência artificial é a chave para nossa segurança."
+                </p>
+                <div class="flex text-yellow-400 mt-4">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+            </div>
+            
+            <div class="glass-effect rounded-2xl p-8 shadow-xl" style="transition-delay: 0.2s;">
+                <div class="flex items-center mb-6">
+                    <img src="https://placehold.co/64x64/0ea5e9/ffffff?text=C" onerror="this.onerror=null; this.src='https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg';" alt="Cliente Carlos Oceano" class="w-16 h-16 rounded-full mr-4">
+                    <div>
+                        <h4 class="text-white font-semibold">Patrícia Lima</h4>
+                        <p class="text-blue-300">Gerente Jurídica, E-commerce Alpha</p>
+                    </div>
+                </div>
+                <p class="text-blue-200 italic">
+                    "A consultoria de LGPD e o treinamento antifraude do SQG nos deixaram 100% compliant e nossos colaboradores muito mais seguros."
+                </p>
+                <div class="flex text-yellow-400 mt-4">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+            </div>
+            
+            <div class="glass-effect rounded-2xl p-8 shadow-xl" style="transition-delay: 0.4s;">
+                <div class="flex items-center mb-6">
+                    <img src="https://placehold.co/64x64/0ea5e9/ffffff?text=A" onerror="this.onerror=null; this.src='https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg';" alt="Cliente Ana Corrente" class="w-16 h-16 rounded-full mr-4">
+                    <div>
+                        <h4 class="text-white font-semibold">Ricardo Souza</h4>
+                        <p class="text-blue-300">CTO, HealthTech Beta</p>
+                    </div>
+                </div>
+                <p class="text-blue-200 italic">
+                    "Em momentos críticos, o tempo de resposta é tudo. O monitoramento 24/7 da equipe SQG é incomparável."
+                </p>
+                <div class="flex text-yellow-400 mt-4">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Contato (Formulário) -->
+<section id="contact" class="py-20 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-900 to-blue-800"></div>
+    <div class="container mx-auto px-6 relative z-10">
+        
+        <div class="text-center w-full mb-16">
+            <h2 class="text-5xl font-bold text-white mb-6 leading-tight">
+                Blindagem Digital <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-300">Começa Aqui</span>
+            </h2>
+            <p class="text-xl text-blue-100 leading-relaxed max-w-3xl mx-auto mb-8">
+                Preencha o formulário e um de nossos consultores de risco entrará em contato em até 1 hora.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            
+            <div class="space-y-8">
+                <div class="glass-effect rounded-2xl p-8 shadow-xl">
+                    <h3 class="text-3xl font-bold text-white mb-6">
+                        Solicite sua <span class="text-cyan-400">Consultoria</span> Gratuita
+                    </h3>
+                    
+                    <form class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-white text-sm font-semibold mb-2">Nome</label>
+                                <input type="text" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300 focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all" placeholder="Seu nome completo">
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm font-semibold mb-2">Empresa</label>
+                                <input type="text" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300 focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all" placeholder="Nome da empresa">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-white text-sm font-semibold mb-2">Email Corporativo</label>
+                                <input type="email" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300 focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all" placeholder="seu@email.com">
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm font-semibold mb-2">Telefone (WhatsApp)</label>
+                                <input type="tel" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300 focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all" placeholder="(11) 99999-9999">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white text-sm font-semibold mb-2">Principal Desafio de Segurança</label>
+                            <select class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all">
+                                <option value="" disabled selected>Selecione um desafio</option>
+                                <option value="fraudes_pix">Fraudes de PIX/Transferência</option>
+                                <option value="phishing">Phishing e Email Corporativo</option>
+                                <option>Conformidade (LGPD)</option>
+                                <option value="treinamento">Treinamento da Equipe</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white text-sm font-semibold mb-2">Detalhes</label>
+                            <textarea rows="5" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-blue-300 focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all resize-none" placeholder="Qual o seu objetivo principal de segurança para este ano?"></textarea>
+                        </div>
+                        
+                        <!-- Botão CTA com cores da Home (ciano/azul) -->
+                        <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
+                            <i class="fas fa-lock mr-3"></i>
+                            Proteger Minha Empresa Agora
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="space-y-8">
+                <!-- Informações de Contato -->
+                <div class="glass-effect rounded-2xl p-8 shadow-xl" style="animation-delay: 0.2s;">
+                    <h3 class="text-2xl font-bold text-white mb-6">Contato Direto</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Central de Governança</h4>
+                                <p class="text-blue-200">Av. Bento Gonçalves, 1000 - Sala 2001<br>Pelotas, RS - 96010-100</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 tentacle">
+                                <i class="fas fa-phone-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Linha Corporativa</h4>
+                                <p class="text-blue-200">(53) 9999-9999<br>Atendimento de Risco 24/7</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 tentacle">
+                                <i class="fas fa-envelope text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Email de Consultoria</h4>
+                                <p class="text-blue-200">empresas@seraqueegolpe.com<br>Resposta imediata para urgências.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mapa Localização -->
+                <div class="glass-effect rounded-2xl p-8 shadow-xl" style="animation-delay: 0.4s;">
+                    <h3 class="text-2xl font-bold text-white mb-4">Escritório Central</h3>
+                    <div class="h-64 bg-blue-700/30 rounded-lg flex items-center justify-center">
+                        <div class="text-center">
+                            <i class="fas fa-building text-cyan-400 text-4xl mb-3"></i>
+                            <p class="text-white text-lg font-semibold">Base de Operações SQG</p>
+                            <p class="text-blue-200">Pelotas, RS - Brasil</p>
+                            <a href="#" class="text-cyan-400 hover:text-cyan-300 text-sm mt-2 block">Ver Rota de Navegação</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Call to Action Final -->
+<section id="contact-cta" class="py-20 bg-gradient-to-r from-blue-900 to-blue-800 relative overflow-hidden">
+    <div class="container mx-auto px-6 text-center relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-5xl font-bold text-white mb-6">
+                Proteção Imediata 
+            </h2>
+            <p class="text-xl text-blue-200 mb-8 leading-relaxed">
+                Não espere o ataque acontecer. Agende sua consultoria gratuita de avaliação de risco hoje mesmo.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-effect rounded-xl p-6 shadow-lg">
+                    <i class="fas fa-headset text-cyan-400 text-3xl mb-4"></i>
+                    <h3 class="text-white font-semibold text-lg mb-2">Suporte Prioritário</h3>
+                    <p class="text-blue-200">Canal direto 24/7</p>
+                </div>
+                <div class="glass-effect rounded-xl p-6 shadow-lg" style="animation-delay: 0.2s;">
+                    <i class="fas fa-handshake text-cyan-400 text-3xl mb-4"></i>
+                    <h3 class="text-white font-semibold text-lg mb-2">Risco Zero</h3>
+                    <p class="text-blue-200">Consultoria gratuita</p>
+                </div>
+                <div class="glass-effect rounded-xl p-6 shadow-lg" style="animation-delay: 0.4s;">
+                    <i class="fas fa-sitemap text-cyan-400 text-3xl mb-4"></i>
+                    <h3 class="text-white font-semibold text-lg mb-2">Plano Estratégico</h3>
+                    <p class="text-blue-200">Defesa personalizada</p>
+                </div>
+            </div>
+            <!-- Botão CTA com cores da Home (ciano/azul) -->
+            <a href="#contact" class="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-cyan-600 hover:to-blue-700 transition-all mt-10 shadow-2xl">
+                <i class="fas fa-calendar-check mr-3"></i> Agendar Chamada Estratégica
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer" class="bg-gradient-to-r from-blue-900 to-blue-800 py-16">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-3 mb-6">
+                    <img src="img/logo.png" 
+                        alt="SQG Logo" 
+                        class="h-10 w-10 object-contain rounded-full" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/40x40/0ea5e9/ffffff?text=SQG';" />
+                    <span class="text-white font-bold text-2xl">SQG Empresas</span>
+                </div>
+                <p class="text-blue-200 mb-6">
+                    Liderando a segurança digital para o setor corporativo no Brasil.
+                </p>
+                <div class="flex space-x-4">
+                    <!-- Ícones sociais com cor da Home (ciano) -->
+                    <a href="#" class="w-10 h-10 bg-cyan-600 rounded-full flex items-center justify-center hover:bg-cyan-700 transition-colors">
+                        <i class="fab fa-linkedin-in text-white"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-cyan-600 rounded-full flex items-center justify-center hover:bg-cyan-700 transition-colors">
+                        <i class="fab fa-twitter text-white"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-cyan-600 rounded-full flex items-center justify-center hover:bg-cyan-700 transition-colors">
+                        <i class="fab fa-instagram text-white"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-white font-semibold text-lg mb-6">Soluções</h3>
+                <ul class="space-y-3">
+                    <!-- Links com cor da Home (ciano) -->
+                    <li><a href="#solutions" class="text-blue-200 hover:text-cyan-400 transition-colors">Cyber Segurança IA</a></li>
+                    <li><a href="#solutions" class="text-blue-200 hover:text-cyan-400 transition-colors">Consultoria de Risco</a></li>
+                    <li><a href="#solutions" class="text-blue-200 hover:text-cyan-400 transition-colors">Treinamento Antifraude</a></li>
+                    <li><a href="#compliance" class="text-blue-200 hover:text-cyan-400 transition-colors">Compliance LGPD</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="text-white font-semibold text-lg mb-6">Navegação</h3>
+                <ul class="space-y-3">
+                    <!-- Links com cor da Home (ciano) -->
+                    <li><a href="#hero" class="text-blue-200 hover:text-cyan-400 transition-colors">Início</a></li>
+                    <li><a href="#results" class="text-blue-200 hover:text-cyan-400 transition-colors">Resultados</a></li>
+                    <li><a href="#testimonials" class="text-blue-200 hover:text-cyan-400 transition-colors">Clientes</a></li>
+                    <li><a href="#contact" class="text-blue-200 hover:text-cyan-400 transition-colors">Contato</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="text-white font-semibold text-lg mb-6">Suporte</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center text-blue-200">
+                        <i class="fas fa-map-marker-alt text-cyan-400 mr-3"></i>
+                        Escritório Principal, RS
+                    </div>
+                    <div class="flex items-center text-blue-200">
+                        <i class="fas fa-phone text-cyan-400 mr-3"></i>
+                        (53) 9999-9999 (24h)
+                    </div>
+                    <div class="flex items-center text-blue-200">
+                        <i class="fas fa-envelope text-cyan-400 mr-3"></i>
+                        empresas@seraqueegolpe.com
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="border-t border-blue-700 mt-12 pt-8 text-center">
+            <p class="text-blue-200">
+                © 2025 SQG. Todos os direitos reservados. Protegendo seu futuro digital.
+            </p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQG | Nossos Parceiros</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Reutilizando estilos e animações dos outros arquivos -->
+    <style>
+        ::-webkit-scrollbar { display: none; }
+        * { font-family: 'Poppins', sans-serif; }
+
+        .ocean-gradient {
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 25%, #0369a1 50%, #0284c7 75%, #0ea5e9 100%);
+            background-attachment: fixed;
+        }
+
+        .deep-ocean {
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 25%, #2563eb 50%, #3b82f6 75%, #60a5fa 100%);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05); /* Um pouco mais transparente para os cards de parceiros */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animações de Bolhas */
+        @keyframes bubble {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { transform: translateY(50vh) scale(1); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(0); opacity: 0; }
+        }
+        .bubble { animation: bubble 10s linear infinite; }
+
+        /* NOVA ANIMAÇÃO: Flutuação Suave para os Cards */
+        @keyframes float-card {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        /* Aplica a flutuação com delays diferentes para parecer orgânico */
+        .float-slow { animation: float-card 8s ease-in-out infinite; }
+        .float-medium { animation: float-card 7s ease-in-out infinite; animation-delay: 1s; }
+        .float-fast { animation: float-card 6s ease-in-out infinite; animation-delay: 2s; }
+
+        /* Animação de Scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    </style>
+</head>
+<body class="ocean-gradient min-h-screen pt-24">
+
+<!-- HEADER (Reutilizado) -->
+<header id="header" class="fixed top-0 w-full z-50 glass-effect" style="background: rgba(255, 255, 255, 0.1);">
+    <nav class="container mx-auto px-6 py-4 relative">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3 h-12">
+                <img src="img/logo.png" alt="SQG Logo" class="h-10 w-10 object-contain rounded-full" onerror="this.onerror=null; this.src='https://placehold.co/40x40/0ea5e9/ffffff?text=SQG';" />
+                <span class="text-white font-bold text-2xl leading-none">SQG | Parceiros</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="text-white hover:text-cyan-300 transition-colors">Home</a>
+                <a href="paraempresas.html" class="text-white hover:text-cyan-300 transition-colors">Para Empresas</a>
+                <a href="#" class="text-cyan-300 font-semibold transition-colors">Parceiros</a>
+            </div>
+            <!-- CTA focado em parceria -->
+            <a href="#seja-parceiro" class="hidden md:block bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-2 rounded-full hover:from-cyan-600 hover:to-blue-700 transition-all font-semibold shadow-lg">
+                Seja um Parceiro
+            </a>
+             <!-- Botão Menu Mobile (Simplificado para o exemplo) -->
+             <button class="md:hidden text-white focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- HERO SECTION: Introdução -->
+<section class="relative h-[400px] overflow-hidden flex items-center justify-center text-center">
+    <div class="absolute inset-0 deep-ocean opacity-90"></div>
+    <!-- Bolhas decorativas -->
+    <div class="absolute top-20 left-10 w-20 h-20 bg-cyan-400 rounded-full opacity-20 bubble"></div>
+    <div class="absolute bottom-20 right-20 w-16 h-16 bg-blue-400 rounded-full opacity-30 bubble" style="animation-delay: 2s;"></div>
+
+    <div class="container mx-auto px-6 relative z-10 animate-on-scroll">
+        <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            Nossa Rede de <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200">Confiança</span>
+        </h1>
+        <p class="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+            Empresas líderes que navegam no oceano digital com segurança, protegidas pela tecnologia e expertise da SQG.
+        </p>
+    </div>
+</section>
+
+<!-- SECTION: Vitrine de Parceiros (Grid de Cards Flutuantes) -->
+<section class="py-20 relative z-10">
+    <div class="container mx-auto px-6">
+        
+        <!-- Categoria 1: Parceiros Estratégicos (Destaque Maior) -->
+        <div class="mb-20">
+            <h2 class="text-3xl font-bold text-white mb-10 flex items-center animate-on-scroll">
+                <i class="fas fa-gem text-cyan-400 mr-3"></i> Parceiros Estratégicos
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Card Parceiro 1 -->
+                <div class="glass-effect rounded-3xl p-8 flex flex-col md:flex-row items-center gap-8 hover:bg-white/10 transition-all duration-500 group animate-on-scroll float-slow shadow-lg hover:shadow-cyan-500/20 border-t border-cyan-400/30">
+                    <div class="w-40 h-40 bg-white/10 rounded-2xl flex items-center justify-center p-4 flex-shrink-0 group-hover:scale-105 transition-transform">
+                        <!-- Placeholder para Logo -->
+                        <img src="https://placehold.co/150x150/0c4a6e/ffffff?text=Logo+Alpha" alt="Logo Parceiro Alpha" class="max-h-full object-contain filter drop-shadow-lg">
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">Grupo Alpha Finance</h3>
+                        <span class="inline-block bg-cyan-500/20 text-cyan-300 text-xs px-3 py-1 rounded-full font-semibold mb-4">Setor Financeiro</span>
+                        <p class="text-blue-100 mb-4">Utiliza nossa IA para monitoramento de transações e prevenção de fraudes em tempo real, protegendo milhões de clientes.</p>
+                        <a href="#" class="text-cyan-400 hover:text-white font-semibold text-sm flex items-center justify-center md:justify-start transition-colors">
+                            Ver Case de Sucesso <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card Parceiro 2 -->
+                <div class="glass-effect rounded-3xl p-8 flex flex-col md:flex-row items-center gap-8 hover:bg-white/10 transition-all duration-500 group animate-on-scroll float-medium shadow-lg hover:shadow-cyan-500/20 border-t border-cyan-400/30" style="transition-delay: 0.2s;">
+                    <div class="w-40 h-40 bg-white/10 rounded-2xl flex items-center justify-center p-4 flex-shrink-0 group-hover:scale-105 transition-transform">
+                         <!-- Placeholder para Logo -->
+                        <img src="https://placehold.co/150x150/0c4a6e/ffffff?text=Logo+Beta" alt="Logo Parceiro Beta" class="max-h-full object-contain filter drop-shadow-lg">
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">Beta E-commerce Global</h3>
+                        <span class="inline-block bg-blue-500/20 text-blue-300 text-xs px-3 py-1 rounded-full font-semibold mb-4">Varejo Online</span>
+                        <p class="text-blue-100 mb-4">Integração completa de compliance LGPD e treinamento antifraude para mais de 5.000 colaboradores.</p>
+                         <a href="#" class="text-cyan-400 hover:text-white font-semibold text-sm flex items-center justify-center md:justify-start transition-colors">
+                            Ver Case de Sucesso <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoria 2: Ecossistema de Segurança (Grid Menor) -->
+        <div>
+             <h2 class="text-2xl font-bold text-white mb-10 flex items-center animate-on-scroll">
+                <i class="fas fa-shield-alt text-blue-400 mr-3"></i> Ecossistema de Segurança
+            </h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Mini Card 1 -->
+                <div class="glass-effect rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300 group animate-on-scroll float-fast">
+                    <div class="h-24 mb-4 flex items-center justify-center bg-white/5 rounded-lg p-2 group-hover:scale-110 transition-transform">
+                        <img src="https://placehold.co/100x60/transparent/ffffff?text=TechShield" alt="Logo TechShield" class="max-h-full object-contain opacity-80 group-hover:opacity-100">
+                    </div>
+                    <h4 class="text-white font-semibold mb-1">TechShield Solutions</h4>
+                    <p class="text-blue-300 text-xs">Cibersegurança Ofensiva</p>
+                </div>
+                
+                 <!-- Mini Card 2 -->
+                <div class="glass-effect rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300 group animate-on-scroll float-medium" style="transition-delay: 0.1s;">
+                    <div class="h-24 mb-4 flex items-center justify-center bg-white/5 rounded-lg p-2 group-hover:scale-110 transition-transform">
+                        <img src="https://placehold.co/100x60/transparent/ffffff?text=DataSafe+Gov" alt="Logo DataSafe" class="max-h-full object-contain opacity-80 group-hover:opacity-100">
+                    </div>
+                    <h4 class="text-white font-semibold mb-1">DataSafe Gov</h4>
+                    <p class="text-blue-300 text-xs">Consultoria Governamental</p>
+                </div>
+
+                 <!-- Mini Card 3 -->
+                <div class="glass-effect rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300 group animate-on-scroll float-slow" style="transition-delay: 0.2s;">
+                    <div class="h-24 mb-4 flex items-center justify-center bg-white/5 rounded-lg p-2 group-hover:scale-110 transition-transform">
+                        <img src="https://placehold.co/100x60/transparent/ffffff?text=EduCyber" alt="Logo EduCyber" class="max-h-full object-contain opacity-80 group-hover:opacity-100">
+                    </div>
+                    <h4 class="text-white font-semibold mb-1">EduCyber</h4>
+                    <p class="text-blue-300 text-xs">Plataforma de Treinamento</p>
+                </div>
+                
+                 <!-- Mini Card 4 -->
+                <div class="glass-effect rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300 group animate-on-scroll float-fast" style="transition-delay: 0.3s;">
+                    <div class="h-24 mb-4 flex items-center justify-center bg-white/5 rounded-lg p-2 group-hover:scale-110 transition-transform">
+                        <img src="https://placehold.co/100x60/transparent/ffffff?text=NetGuard+Latam" alt="Logo NetGuard" class="max-h-full object-contain opacity-80 group-hover:opacity-100">
+                    </div>
+                    <h4 class="text-white font-semibold mb-1">NetGuard Latam</h4>
+                    <p class="text-blue-300 text-xs">Infraestrutura de Rede</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- SECTION: CTA - Junte-se a nós -->
+<section id="seja-parceiro" class="py-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-t from-blue-900 to-transparent"></div>
+    
+    <div class="container mx-auto px-6 relative z-10 text-center animate-on-scroll">
+        <div class="glass-effect rounded-3xl p-12 max-w-4xl mx-auto border border-cyan-400/30 shadow-2xl">
+            <h2 class="text-4xl font-bold text-white mb-6">
+                Quer fazer parte desta <span class="text-cyan-400">Rede de Proteção?</span>
+            </h2>
+            <p class="text-xl text-blue-100 mb-8 leading-relaxed">
+                Una sua marca à SQG e demonstre ao mercado seu compromisso inabalável com a segurança digital e a inovação.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="paraempresas.html#contact" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
+                    Falar com a Equipe de Parcerias
+                </a>
+                <a href="#" class="bg-white/10 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white/20 transition-all border border-white/20">
+                    Baixar Mídia Kit
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER (Simplificado para consistência visual) -->
+<footer id="footer" class="py-12 bg-blue-950 text-blue-200 relative z-10 border-t border-white/10">
+    <div class="container mx-auto px-6 text-center">
+        <div class="flex items-center justify-center space-x-3 mb-6 animate-on-scroll">
+            <img src="img/logo.png" alt="SQG Logo" class="h-10 w-10 object-contain rounded-full" onerror="this.onerror=null; this.src='https://placehold.co/40x40/0ea5e9/ffffff?text=SQG';" />
+            <span class="text-white font-bold text-2xl">SQG Parceiros</span>
+        </div>
+        <p class="text-sm mb-6 max-w-lg mx-auto">Construindo juntos um futuro digital mais seguro para empresas e pessoas.</p>
+        <div class="text-sm">
+            &copy; 2025 SQG. Todos os direitos reservados.
+        </div>
+    </div>
+</footer>
+
+<!-- Script de Animação de Scroll (Reutilizado) -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        const elements = document.querySelectorAll('.animate-on-scroll');
+        elements.forEach(el => observer.observe(el));
+    });
+</script>
+
+</body>
+</html>
