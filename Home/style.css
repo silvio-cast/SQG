@@ -34,14 +34,16 @@
         word-break: break-word !important;
     }
 
-    /* HERO: primeira div maior e espaçamento do cabeçalho */
+    /* HERO: garantir espaçamento do cabeçalho e altura suficiente para o polvo */
     #service-hero {
-        min-height: 90vh !important;
-        padding-top: 110px !important;
+        padding-top: 90px !important; /* Espaço para o header fixo */
+        min-height: 750px !important; /* Mais altura para o polvo aparecer */
+        height: auto !important;
     }
     #service-hero > .container {
-        min-height: 60vh !important;
-        padding-top: 24px !important;
+        min-height: 600px !important;
+        padding-top: 0 !important;
+        padding-bottom: 32px !important;
     }
 }
 /* Responsividade geral */
