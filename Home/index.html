@@ -579,10 +579,11 @@
 
     var layout = {
         title: {
-            text: 'Crescimento de Perdas por Golpes (R$ Bilhões)',
+            text: 'Crescimento de Perdas por Golpes<br>(R$ Bilhões)',
             font: {
                 color: 'white'
-            }
+            },
+            automargin: true
         },
         // Ajuste de cores para o tema dark/ocean
         plot_bgcolor: 'rgba(255, 255, 255, 0.05)',
@@ -607,6 +608,30 @@
 
     Plotly.newPlot('impact-chart', data, layout, {displayModeBar: false});
 
+    // Ajusta a margem superior do gráfico em telas pequenas para evitar corte do título
+    function adjustImpactChartMargin() {
+        var w = window.innerWidth || document.documentElement.clientWidth;
+        var topMargin = 40; // padrão desktop
+        if (w <= 480) topMargin = 10; // mobile bem estreito ARRUMAR FUTURAMENTE
+        else if (w <= 768) topMargin = 40; // mobile/tablet
+
+        try {
+            Plotly.relayout('impact-chart', {'margin.t': topMargin});
+        } catch (e) {
+            // ignora se não estiver pronto
+        }
+    }
+
+    // Executa logo após o plot ser criado
+    Plotly.newPlot('impact-chart', data, layout, {displayModeBar: false}).then(function() {
+        adjustImpactChartMargin();
+    });
+
+    var adjustTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(adjustTimeout);
+        adjustTimeout = setTimeout(adjustImpactChartMargin, 150);
+    });
 
     // 2. Script para Menu Mobile (Funcionalidade)
     document.getElementById('mobile-menu-button').addEventListener('click', function() {
