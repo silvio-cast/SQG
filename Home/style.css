@@ -66,6 +66,13 @@
         margin-top: 0 !important;
     }
 
+    /* Esconde o polvo (kraken) no mobile */
+    #service-hero .tentacle,
+    #service-hero img[alt*="Kraken"],
+    #service-hero img[src*="kraken"] {
+        display: none !important;
+    }
+
     /* HERO: garantir espaçamento do cabeçalho e altura suficiente para o polvo */
     #service-hero {
         padding-top: 90px !important; /* Espaço para o header fixo */
