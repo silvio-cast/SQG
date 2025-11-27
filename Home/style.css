@@ -201,6 +201,35 @@ header img, .header img, nav img, .navbar img {
         max-width: 60px !important;
     }
 }
+/* Centralizar footer no mobile: empilha colunas e centraliza conteúdo */
+@media (max-width: 768px) {
+    #footer {
+        text-align: center !important;
+    }
+    #footer .grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+    #footer .grid > div {
+        justify-self: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 520px !important;
+    }
+    #footer .flex {
+        justify-content: center !important;
+        margin-left: 0 !important;
+    }
+    #footer ul {
+        padding-left: 0 !important;
+        list-style: none !important;
+        display: inline-block !important;
+    }
+    #footer ul li {
+        display: block !important;
+        margin: 6px 0 !important;
+    }
+}
 /* Logo menor no mobile: metade da altura do desktop (desktop = 64px) */
 @media (max-width: 480px) {
     header img, .header img, nav img, .navbar img {
@@ -231,6 +260,48 @@ header img, .header img, nav img, .navbar img {
 .deep-ocean {
     background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 25%, #2563eb 50%, #3b82f6 75%, #60a5fa 100%);
 }
+
+    /* --- Ajustes: Seção 'Recursos' (feature cards) mais estreitos no mobile --- */
+    @media (max-width: 768px) {
+        #features-overview .grid > div {
+            max-width: 420px !important; /* limita a largura do card */
+            width: calc(100% - 48px) !important; /* deixa margem lateral */
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        #features-overview .glass-effect {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #features-overview .grid > div {
+            max-width: 340px !important;
+            width: calc(100% - 32px) !important;
+        }
+    }
+
+    /* --- Ajustes: Seção 'Metodologia' (methodology) mais estreitos no mobile --- */
+    @media (max-width: 768px) {
+        #methodology-section .grid > div {
+            max-width: 420px !important; /* limita a largura do card */
+            width: calc(100% - 48px) !important; /* deixa margem lateral */
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        #methodology-section .glass-effect {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #methodology-section .grid > div {
+            max-width: 340px !important;
+            width: calc(100% - 32px) !important;
+        }
+    }
 
 /* --- Efeito Glassmorphism Customizado --- */
 
